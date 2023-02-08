@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: seokjyoo <seokjyoo@student.42.fr>          +#+  +:+       +#+         #
+#    By: codespace <codespace@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/25 13:03:12 by seokjyoo          #+#    #+#              #
-#    Updated: 2023/01/30 17:30:09 by seokjyoo         ###   ########.fr        #
+#    Updated: 2023/02/08 06:59:09 by codespace        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,6 +42,5 @@ re			:
 $(NAME)		:	$(OBJ)
 				cd LIBFT ; make ; cd ../
 				$(CC) $(CFLAG) $(OBJ) ./LIBFT/libft.a -lreadline -o $(NAME)
-
 
 .PHONY		:	all clean fclean re bonus
