@@ -2,17 +2,17 @@ typedef struct s_node {
 	int				is_root_end;
 	char			*data;
 	struct s_node	*next_class;
-}	t_node;
+}	t_list;
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
 #include <stdlib.h>
 
-t_node	*new_node(char *data, int is_root)
+t_list	*new_node(char *data, int is_root)
 {
-	t_node *node;
+	t_list *node;
 
-	node = (t_node *)malloc(sizeof(t_node));
+	node = (t_list *)malloc(sizeof(t_list));
 	node->is_root_end = is_root;
 	node->data = data;
 	node->next_class = NULL;
@@ -35,16 +35,16 @@ int	count_pipe(char *line)
 	return (return_val);
 }
 
-t_node	*set_root(int count_num)
+t_list	*set_root(int count_num)
 {
-	t_node	*temp;
-	t_node	*root;
+	t_list	*temp;
+	t_list	*root;
 	int		index;
 
 	index = 0;
 	root = new_node(NULL, 1);
 	count_num++;
-	root->next_class = (t_node *)malloc(sizeof(t_node) * (count_num + 1));
+	root->next_class = (t_list *)malloc(sizeof(t_list) * (count_num + 1));
 	(root->next_class)[count_num].is_root_end = -1;
 	while (count_num)
 	{
@@ -71,7 +71,7 @@ void	alloc_cmd_before_pipe(char *line, int before_index, int next_index, char **
 	}
 }
 
-void	alloc_cmd(t_node *root, char *line)
+void	alloc_cmd(t_list *root, char *line)
 {
 	int		index;
 	int		root_index;
@@ -93,7 +93,7 @@ void	alloc_cmd(t_node *root, char *line)
 	}
 }
 
-void	print_root(t_node *root)
+void	print_root(t_list *root)
 {
 	int		index;
 
@@ -106,10 +106,10 @@ void	print_root(t_node *root)
 	}
 }
 
-t_node	*parse_data(char *line)
+t_list	*parse_data(char *line)
 {
 	int		count_num;
-	t_node	*root;
+	t_list	*root;
 
 	count_num = count_pipe(line);
 	root = set_root(count_num);
@@ -121,7 +121,7 @@ t_node	*parse_data(char *line)
 
 int main()
 {
-		t_node	*line_root;
+		t_list	*line_root;
 		char	*line;
 
 		line = strdup("asdf|asdf");
