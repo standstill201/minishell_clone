@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstmap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seokjyoo <seokjyoo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/17 14:19:13 by seokjyoo          #+#    #+#             */
-/*   Updated: 2022/07/17 21:29:26 by seokjyoo         ###   ########.fr       */
+/*   Updated: 2023/02/09 05:25:20 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 	head = NULL;
 	while (lst)
 	{
-		new_node = ft_lstnew(f(lst -> content));
+		new_node = ft_lstnew(f(lst -> content), 0);
 		if (!new_node)
 		{
 			ft_lstclear(&head, del);
