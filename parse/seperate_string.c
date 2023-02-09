@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 07:38:45 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/08 13:53:15 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/09 05:11:28 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,40 +22,6 @@
 
 // make a function seperate string by white space and special metacharacter |. each seperated string is named 'token'
 
-t_list	*ft_lstnew(char *content)
-{
-	t_list	*new_node;
-
-	new_node = (t_list *)malloc(sizeof(t_list));
-	if (!new_node)
-		return (0);
-	new_node -> content = content;
-	new_node -> next = NULL;
-	new_node -> is_meta = 0;
-	return (new_node);
-}
-
-t_list	*ft_lstlast(t_list *lst)
-{
-	if (!lst)
-		return (NULL);
-	while (lst -> next)
-		lst = lst -> next;
-	return (lst);
-}
-void	ft_lstadd_back(t_list **lst, t_list *new)
-{
-	t_list	*last_addr;
-
-	if (!*lst)
-	{
-		*lst = new;
-		return ;
-	}
-	last_addr = ft_lstlast(*lst);
-	last_addr -> next = new;
-}
-
 char	*read_string_before_quote(char *str, t_list **root)
 {
 	int		index;
@@ -70,8 +36,8 @@ char	*read_string_before_quote(char *str, t_list **root)
 		if (str[index] == trg)
 		{
 			return_val = ft_substr(str, 0, index);
-			ft_lstadd_back(root, ft_lstnew(return_val));
-			return(str + index);
+			ft_lstadd_back(root, ft_lstnew(return_val, 0));
+			return(str + index + 1);
 		}
 		index++;
 	}
@@ -99,7 +65,7 @@ char	*read_string_before_white_quote(char *str, t_list **root)
 	while (str[index] && !is_meta(str[index]))
 		index++;
 	return_val = ft_substr(str, 0, index);
-	ft_lstadd_back(root, ft_lstnew(return_val));
+	ft_lstadd_back(root, ft_lstnew(return_val, 0));
 	return (str + index);
 }
 
@@ -113,13 +79,13 @@ char	*read_string_before_redirection(char *str, t_list **root)
 		return_val[0] = *str;
 		return_val[1] = *str;
 		return_val[2] = 0;
-		ft_lstadd_back(root, ft_lstnew(return_val));
+		ft_lstadd_back(root, ft_lstnew(return_val, 1));
 		return (str + 2);
 	}
 	return_val = (char *)malloc(sizeof(char) * 2);
 	return_val[0] = *str;
 	return_val[1] = '\0';
-	ft_lstadd_back(root, ft_lstnew(return_val));
+	ft_lstadd_back(root, ft_lstnew(return_val, 1));
 	return (str + 1);
 }
 
@@ -130,35 +96,43 @@ char	*read_string_before_pipe(char *str, t_list **root)
 
 	index = 0;
 	str++;
-	while (str[index])
+	if (*str == '|')
 	{
-		if (str[index] == '|')
-		{
-			return_val = ft_substr(str, 0, index);
-			ft_lstadd_back(root, ft_lstnew(return_val));
-			return(str + index);
-		}
+		printf("temp: syntax error near unexpected token \'|\'\n");
+		exit(1);
+	}
+	return_val = (char *)malloc(sizeof(char) * 2);
+	return_val[0] = '|';
+	return_val[1] = '\0';
+	ft_lstadd_back(root, ft_lstnew(return_val, 1));
+	return (str);
+}
+
+char	*read_string_while_white(char *str, t_list **root)
+{
+	int		index;
+	char	*return_val;
+	
+	index = 0;
+	while (str[index] && ft_iswhite(str[index]))
 		index++;
-	}
-	if (str[index] == '\0')
-	{
-		return_val = ft_substr(str, 0, index);
-		ft_lstadd_back(root, ft_lstnew(return_val));
-		return(str + index);
-	}
+	return_val = ft_substr(str, 0, index);
+	ft_lstadd_back(root, ft_lstnew(return_val, 1));
+	return (str + index);
 }
 
 char	*parse_meta(char *str, t_list **root)
 {
 	char	*return_val;
 	
-	printf("str : %s\n", str);
 	if (*str == '\'' || *str == '\"')
 		return_val = read_string_before_quote(str, root);
 	else if (*str == '|')
 		return_val = read_string_before_pipe(str, root);
 	else if (*str == '>' || *str == '<')
 		return_val = read_string_before_redirection(str, root);
+	else if (ft_iswhite(*str))
+		return_val = read_string_while_white(str, root);
 	return (return_val);
 }
 
@@ -166,26 +140,16 @@ t_list	*seperate_string(char *str)
 {
 	char	**return_val;
 	t_list	*root;
-	t_list	*temp;
 
-	root = ft_lstnew("asdfasdf");
-	temp = root;
+	root = ft_lstnew("head node start", 0);
 	while (*str && ft_iswhite(*str))
 		str++;
 	while (*str)
 	{
 		if (is_meta(*str))
 			str = parse_meta(str, &root);
-		str = read_string_before_white_quote(str, &root);
-		printf("return str: %s\n", str);
-		// print node without changing node's address
-		temp = root;
-		while(temp)
-		{
-			printf("temp: %s\n", temp->content);
-			temp = temp->next;
-		}
-		
+		else
+			str = read_string_before_white_quote(str, &root);
 	}
 	return (root);
 }
@@ -197,10 +161,13 @@ int main()
 	int		index;
 
 	index = 0;
-	return_val = seperate_string("echo\"|\" hello world");
+	return_val = seperate_string("echo\"\"\'|\'\"\" >> hello world");
 	while (return_val)
 	{
-		// printf("temp: %s\n", return_val->content);
+		printf("--------------------------\n");
+		printf("is_meta: %d\n", return_val->is_meta);
+		printf("content: $%s$\n", return_val->content);
+		printf("--------------------------\n");
 		return_val = return_val->next;
 	}
 	return (0);
