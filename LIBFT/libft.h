@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seokjyoo <seokjyoo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/09 13:30:40 by seokjyoo          #+#    #+#             */
-/*   Updated: 2022/07/18 21:46:12 by seokjyoo         ###   ########.fr       */
+/*   Updated: 2023/02/09 05:09:53 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@
 
 typedef struct s_list
 {
-	void			*content;
+	char			*content;
+	int				is_meta;
 	struct s_list	*next;
 }	t_list;
 
@@ -58,8 +59,9 @@ int			ft_isdigit(int character);
 int			ft_isprint(int character);
 int			ft_tolower(int character);
 int			ft_toupper(int character);
+int			ft_iswhite(char c);
 
-t_list		*ft_lstnew(void *content);
+t_list		*ft_lstnew(char *content, int is_meta);
 void		ft_lstadd_front(t_list **lst, t_list *new);
 int			ft_lstsize(t_list *lst);
 t_list		*ft_lstlast(t_list *lst);

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: seokjyoo <seokjyoo@student.42.fr>          +#+  +:+       +#+         #
+#    By: codespace <codespace@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/25 13:18:01 by seokjyoo          #+#    #+#              #
-#    Updated: 2023/01/30 14:12:41 by seokjyoo         ###   ########.fr        #
+#    Updated: 2023/02/08 11:14:07 by codespace        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,6 +40,7 @@ SRC_1	= ft_isalpha.c \
 	ft_atoi.c \
 	ft_calloc.c \
 	ft_strdup.c \
+	ft_iswhite.c \
 
 SRC_2	= ft_substr.c \
 	ft_strjoin.c \
