@@ -1,32 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/25 13:03:19 by seokjyoo          #+#    #+#             */
-/*   Updated: 2023/02/11 05:22:17 by codespace        ###   ########.fr       */
+/*   Created: 2023/02/10 04:24:16 by codespace         #+#    #+#             */
+/*   Updated: 2023/02/10 07:01:50 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../header/minishell.h"
+#ifndef STRUCT_H
+# define STRUCT_H
 
-int	main(void)
+typedef struct s_list
 {
-	char	*line;
-	t_list	*line_root;
+	char			*content;
+	int				pipe_n;
+	int				is_meta;
+	int				is_single_quote;
+	struct s_list	*next;
+}	t_list;
 
-	while (1)
-	{
-		line = readline("minishell$ ");
-		if (!line)
-			break;
-		if (line[0] != '\0')
-			add_history(line);
-		line_root = parse_data(line);
-		// run_process(parsed_line);
-		free(line);
-	}
-}
+typedef struct s_cmd
+{
+	char			*cmd;
+	char			**args;
+	int				pipe_n;
+	struct s_cmd	*next;
+}	t_cmd;
 
+// aasdfxzcv$PATH---asdfxczvdsf
+// aasdfxzcv$1PATH---asdfxczvdsf
+
+#endif
