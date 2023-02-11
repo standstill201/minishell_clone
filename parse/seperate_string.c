@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 07:38:45 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/10 07:38:31 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/11 08:03:51 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -247,43 +247,57 @@ void	set_pipe_n(t_list **root)
 // ex2) echo "$HOME"s -> echo, /Users/jeonghyeonjeongs
 // ex3) echo '$HOME's -> echo, $HOMEs
 
-// void	merge_string_quote(t_list **temp, t_list **return_val)
-// {
-// 	char	*return_val_str;
-// // write expressions on each code line
-// 	return_val_str = (char *)malloc(sizeof(char) * 1);
-// 	return_val_str[0] = '\0';
-// 	while ((*temp)->next != NULL && (*temp)->next->is_meta == 0)
-// 	{
-// 		return_val_str = ft_strjoin(return_val_str, (*temp)->content);
-// 		*temp = (*temp)->next;
-// 	}
-// 	ft_lstadd_back(return_val, ft_lstnew(return_val_str, 0));
-// 	*temp = (*temp)->next;
-// }
+t_list	*string_merger(t_list *temp, t_list **return_val)
+{
+	char	*add_string;
 
-// void	merge_string_categorize(t_list **temp, t_list **return_val)
-// {
-// 	if ((*temp)->next != NULL && (*temp)->next->is_meta == 0)
-// 		merge_string_quote(temp, return_val);
-// 	else if ((*temp)->next != NULL && (*temp)->next->is_meta == 1)
-// 		merge_string_meta(temp, return_val);
-// 	else
-// 	{
-// 		ft_lstadd_back(return_val, ft_lstnew((*temp)->content, 0));
-// 		*temp = (*temp)->next;
-// 	}
-// }
+	add_string = "";
+	while (temp && temp->is_meta == 0)
+	{
+		add_string = ft_strjoin(add_string, temp->content);
+		temp = temp->next;
+	}
+	ft_lstadd_back(return_val, ft_lstnew(add_string, 0));
+	return (temp);
+}
 
-// t_list	*merge_string_set_cmd_option(t_list **root)
-// {
-// 	t_list	*temp;
-// 	t_list	*return_val;
+void	ft_lstclear(t_list **lst, void (*del)(void *))
+{
+	t_list	*curr;
 
-// 	temp = *root;
-// 	while (temp)
-// 		merge_string_categorize(&temp, &return_val);
-// }
+	while (*lst)
+	{
+		curr = (*lst)->next;
+		printf("%s\n", curr->content);
+		// error here
+		// del((*lst)->content);
+		
+		free((*lst)->content);
+		free(*lst);
+		*lst = curr;
+	}
+}
+
+t_list	*merge_string(t_list **root)
+{
+	t_list	*temp;
+	t_list	*return_val;
+
+	return_val = ft_lstnew("", 0);
+	temp = (*root)->next;
+	while (temp)
+	{
+		if (temp->is_meta == 0)
+			temp = string_merger(temp, &return_val);
+		else
+		{
+			ft_lstadd_back(&return_val, ft_lstnew(ft_strdup(temp->content), 1));
+			temp = temp->next;
+		}
+	}
+	return (return_val);
+}
+
 
 void	set_env(t_list **root)
 {
@@ -313,10 +327,10 @@ int main()
 	int		index;
 
 	index = 0;
-	return_val = seperate_string("\"dsafj__$PATH---asdfjh$PATH2--xcv$PATH3$   $\"");
+	return_val = seperate_string("echo 'asdf'\"zxvc\" | cat '$test' \"$HOME\"");
 	set_pipe_n(&return_val);
 	set_env(&return_val);
-	t_list	*temp = return_val;
+	t_list	*temp = merge_string(&return_val);
 
 	while (temp)
 	{
@@ -327,8 +341,8 @@ int main()
 		printf("--------------------------\n");
 		temp = temp->next;
 	}
+	system("leaks a.out");
 	return (0);
-	
 }
 //  echo asdf | cat '$test'
 
