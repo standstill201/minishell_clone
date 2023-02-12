@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 07:35:29 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/12 07:36:09 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/12 08:33:15 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,17 @@ void	set_pipe_n(t_list **root)
 t_list	*string_merger(t_list *temp, t_list **return_val)
 {
 	char	*add_string;
+	int		pipe_n;
 
 	add_string = "";
+	pipe_n = temp->pipe_n;
 	while (temp && temp->is_meta == 0)
 	{
 		add_string = ft_strjoin(add_string, temp->content);
 		temp = temp->next;
 	}
 	ft_lstadd_back(return_val, ft_lstnew(add_string, 0));
+	ft_lstlast(*return_val)->pipe_n = pipe_n;
 	return (temp);
 }
 
@@ -54,11 +57,14 @@ t_list	*merge_string(t_list **root)
 	{
 		if (temp->is_meta == 0)
 			temp = string_merger(temp, &return_val);
-		else
+		else if (temp->is_meta == 1 && temp->content[0] != '|')
 		{
 			ft_lstadd_back(&return_val, ft_lstnew(ft_strdup(temp->content), 1));
+			ft_lstlast(return_val)->pipe_n = temp->pipe_n;
 			temp = temp->next;
 		}
+		else
+			temp = temp->next;
 	}
 	ft_lstclear(root, free);
 	return (return_val);

@@ -1,32 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_data.c                                       :+:      :+:    :+:   */
+/*   organize_execute.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/12 05:55:43 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/12 08:51:28 by codespace        ###   ########.fr       */
+/*   Created: 2023/02/12 11:36:19 by codespace         #+#    #+#             */
+/*   Updated: 2023/02/12 12:48:11 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/minishell.h"
 
-t_list	*parse_data(char *str)
+void	organize_execute(t_list **root)
 {
-	t_list	*pre_parse;
-	t_list	*return_val;
-	int		index;
+	t_list	*temp;
 
-	index = 0;
-	pre_parse = seperate_string(str);
-	set_pipe_n(&pre_parse);
-	set_env(&pre_parse);
-	return_val = merge_string(&pre_parse);
-	return (return_val);
+	temp = *root;
+	while (temp)
+	{
+		execute(tem);
+		temp = temp->next;
+	}
+
 }
-//echo adf | cat -e | asdf
 
-// 1.input command -- ended--
-// 2. <<
-// 3. seperate command and redirection part
+// asdf
+// asdf
+// asdf
+// 
+// afsd
