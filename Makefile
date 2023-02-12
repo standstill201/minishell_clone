@@ -6,7 +6,7 @@
 #    By: codespace <codespace@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/25 13:03:12 by seokjyoo          #+#    #+#              #
-#    Updated: 2023/02/08 06:59:09 by codespace        ###   ########.fr        #
+#    Updated: 2023/02/12 07:50:58 by codespace        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,14 +14,18 @@ NAME		=	minishell
 
 CC			=	cc
 
-CFLAG		=	#-Wall -Wextra -Werror
+CFLAG		=	-g#-Wall -Wextra -Werror
 
 RM			=	rm -rf
 
 
 SRC			=	./main/main.c \
 				./parse/parse_data.c \
-				./error_handle/sj_error.c
+				./parse/parse_meta.c \
+				./parse/parse_meta2.c \
+				./parse/seperate_string.c \
+				./parse/setting_quote.c \
+				./error_handle/sj_error.c \
 
 OBJ			=	$(SRC:.c=.o)
 
