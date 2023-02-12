@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 13:04:12 by seokjyoo          #+#    #+#             */
-/*   Updated: 2023/02/12 07:42:32 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/12 12:03:13 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <unistd.h>
+# include <stdlib.h>
+# include <fcntl.h>
 
 # include "../LIBFT/libft.h"
 
@@ -34,8 +36,11 @@ void	double_quote_task(char *return_val, t_list **root);
 char	*read_string_before_redirection(char *str, t_list **root);
 char	*read_string_before_dollar(char *str, t_list **root);
 // meta_parse_part end
-
 // parse_part end
+
+// execute_part
+void	organize_execute(t_list **root);
+// execute_part end
 
 // error_handle_part
 void	sj_error(int errno);

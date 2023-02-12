@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 13:03:19 by seokjyoo          #+#    #+#             */
-/*   Updated: 2023/02/12 07:50:27 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/12 12:09:25 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,13 @@ int	main(void)
 		{
 			printf("--------------------------\n");
 			printf("is_meta: %d\n", temp->is_meta);
-			printf("!!!!!!!!!!!!!\n");
 			printf("pipe_n: %d\n", temp->pipe_n);
 			printf("content: $%s$\n", temp->content);
 			printf("--------------------------\n");
 			temp = temp->next;
 		}
+		printf("\n\n");
+		organize_execute(&line_root);
 		// run_process(parsed_line);
 		free(line);
 	}
