@@ -6,7 +6,7 @@
 /*   By: gychoi <gychoi@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 17:55:27 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/12 19:48:43 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/13 13:29:09 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,9 @@ int	check_option(char *option)
 		return (0);
 }
 
-void	ft_echo(char **command)
+// void, or int?
+// echo returns only EXIT_SUCCESS
+int	ft_echo(char **command)
 {
 	int	i;
 	int	option;
@@ -56,6 +58,7 @@ void	ft_echo(char **command)
 	}
 	if (!option)
 		write(1, "\n", 2);
+	return (EXIT_SUCCESS);
 }
 
 int	main(int argc, char **argv)
