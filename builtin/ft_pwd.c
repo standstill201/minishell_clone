@@ -6,15 +6,12 @@
 /*   By: gychoi <gychoi@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 13:25:17 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/13 14:13:18 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/14 16:07:18 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <string.h>
-#include <stdlib.h>
+#include "builtin.h"
 
-// need to change ft_
 int	ft_pwd(char **command)
 {
 	char	*path;
@@ -24,8 +21,8 @@ int	ft_pwd(char **command)
 	path = getcwd(NULL, 0);
 	if (path == NULL)
 		return (EXIT_FAILURE);
-	write(1, path, strlen(path));
-	write(1, "\n", 1);
+	ft_putstr_fd(path, 1);
+	ft_putstr_fd("\n", 1);
 	free(path);
 	return (EXIT_SUCCESS);
 }

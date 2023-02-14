@@ -1,28 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test_input.h                                       :+:      :+:    :+:   */
+/*   builtin.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gychoi <gychoi@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/09 15:18:57 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/13 19:54:39 by gychoi           ###   ########.fr       */
+/*   Created: 2023/02/14 14:13:04 by gychoi            #+#    #+#             */
+/*   Updated: 2023/02/14 14:15:06 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TEST_INPUT_H
-# define TEST_INPUT_H
+#ifndef BUILTIN_H
+# define BUILTIN_H
 
-# include "executor.h"
+# include "../LIBFT/libft.h"
 
-typedef struct s_test_input
-{
-	char			**content;
-	int				fd_in;
-	int				fd_out;
-	struct s_test_input	*next;
-}	t_test_input;
+# include <unistd.h>
+# include <stdlib.h>
 
-void	get_test_input(t_test_input **arr);
+# define EXIT_SUCCESS 0
+# define EXIT_FAILURE 1
 
 #endif
