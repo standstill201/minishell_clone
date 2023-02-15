@@ -5,7 +5,8 @@
 
 typedef struct s_test_input
 {
-	char				*envp;
+	char				*key;
+	char				*value;
 	struct s_test_input	*next;
 }	t_test_input;
 
