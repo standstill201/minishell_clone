@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 07:38:45 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/12 07:43:39 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/13 09:58:04 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ char	*read_string_before_white_quote(char *str, t_list **root)
 
 t_list	*seperate_string(char *str)
 {
-	char	**return_val;
 	t_list	*root;
 
 	root = ft_lstnew(ft_strdup("root node start"), 0);

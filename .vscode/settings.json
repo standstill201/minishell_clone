@@ -4,6 +4,9 @@
 		"string.h": "c",
 		"sstream": "c",
 		"stdio.h": "c",
-		"unistd.h": "c"
+		"unistd.h": "c",
+		"string": "c",
+		"string_view": "c",
+		"random": "c"
 	}
 }
