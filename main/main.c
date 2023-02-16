@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 13:03:19 by seokjyoo          #+#    #+#             */
-/*   Updated: 2023/02/16 01:25:55 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/16 02:22:13 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ int	main(void)
 			temp = temp->next;
 		}
 		free(line);
+		while(1)
+			continue ;
 	}
 }
 
