@@ -6,7 +6,7 @@
 #    By: codespace <codespace@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/25 13:03:12 by seokjyoo          #+#    #+#              #
-#    Updated: 2023/02/12 12:06:37 by codespace        ###   ########.fr        #
+#    Updated: 2023/02/15 18:49:25 by codespace        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,8 +25,13 @@ SRC			=	./main/main.c \
 				./parse/parse_meta2.c \
 				./parse/seperate_string.c \
 				./parse/setting_quote.c \
-				./error_handle/sj_error.c \
-				./execute/organize_execute.c \
+				./parse/redi_process/set_here.c \
+				./parse/redi_process/heredoc_input.c \
+				./parse/redi_process/del_redi_read_here.c \
+				./parse/final_parse/final_parse_lst.c \
+				./parse/final_parse/final_parse.c \
+				./error_handle/minishell_error.c \
+				./gnl/get_next_line.c \
 
 OBJ			=	$(SRC:.c=.o)
 

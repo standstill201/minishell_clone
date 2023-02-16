@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 07:28:27 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/12 07:30:08 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/15 14:41:30 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 int	is_meta(char c)
 {
-	if (c == '|' || c == '>' || c == '<' || ft_iswhite(c) || c == '\'' || c == '\"' || c == '$')
+	if (c == '|' || c == '>' || c == '<' || ft_iswhite(c) ||
+	c == '\'' || c == '\"' || c == '$' || c == ';' || c == '\\')
 		return (1);
 	else
 		return (0);
@@ -46,10 +47,7 @@ char	*read_string_before_quote(char *str, t_list **root)
 		index++;
 	}
 	if (str[index] == '\0')
-	{
-		printf("temp: syntax error: unexpected end of file\n");
-		exit(1);
-	}
+		unexpected_token_end();
 }
 
 char	*read_string_while_white(char *str, t_list **root)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sj_error.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seokjyoo <seokjyoo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 17:25:06 by seokjyoo          #+#    #+#             */
-/*   Updated: 2023/01/30 17:29:41 by seokjyoo         ###   ########.fr       */
+/*   Updated: 2023/02/15 10:53:14 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,3 +23,4 @@ void	sj_error(int errno)
 	if (errno == LINE_SPILL)
 		case_line_spill();
 }
+

@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 10:50:45 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/12 10:50:51 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/15 20:19:42 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,13 +53,13 @@ int	read_heredoc_infile(char **av)
 	lim = (char *)ft_calloc(ft_strlen(av[2]) + 1, 1);
 	ft_memcpy(lim, av[2], ft_strlen(av[2]));
 	lim[ft_strlen(av[2])] = '\n';
-	line = get_next_line(STDIN_FILENO);
+	line = get_next_line(STDIN_FILENO, 0);
 	while (line && ft_strncmp(line, lim, ft_strlen(line)))
 	{
 		write(fd, line, ft_strlen(line));
 		free(line);
 		write(1, "> ", 2);
-		line = get_next_line(STDIN_FILENO);
+		line = get_next_line(STDIN_FILENO, 0);
 	}
 	close(fd);
 	fd = open(str, O_RDONLY);
