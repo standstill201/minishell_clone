@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/09 13:30:40 by seokjyoo          #+#    #+#             */
-/*   Updated: 2023/02/11 07:49:35 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/17 10:58:30 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include <stdlib.h>
 
-#include "../struct/struct.h"
+#include "../include/struct.h"
 
 size_t		ft_strlen(const char *str);
 size_t		ft_strlcpy(char *dst, const char *src, size_t len);
