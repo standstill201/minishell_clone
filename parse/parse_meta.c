@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 07:28:27 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/17 10:56:53 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/17 11:10:41 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,11 @@ char	*parse_meta(char *str, t_list **root)
 	else if (*str == '$')
 		return_val = read_string_before_dollar(str, root);
 	else
-		return_val = str;
+	{
+		ft_putstr_fd("temp: syntax error near unexpected token `", 2);
+		ft_putchar_fd(*str, 2);
+		ft_putstr_fd("\'\n", 2);
+		exit(1);
+	}
 	return (return_val);
 }

@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 07:31:30 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/17 10:56:53 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/17 11:08:53 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,11 @@ void	double_quote_task(char *return_val, t_list **root)
 
 	index = 0;
 	index_before = 0;
+	if (!return_val[index])
+	{
+		ft_lstadd_back(root, ft_lstnew(ft_strdup(""), 0));
+		return ;
+	}
 	while (return_val[index])
 	{
 		while (return_val[index] && return_val[index] != '$')
