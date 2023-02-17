@@ -6,11 +6,11 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 18:23:52 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/15 18:52:31 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/17 10:56:53 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../header/minishell.h"
+#include "../../include/minishell.h"
 
 t_cmd	*ft_lstnew_cmd(char *cmd, char **args)
 {

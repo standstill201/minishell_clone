@@ -6,11 +6,11 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 05:55:43 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/15 19:15:56 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/17 10:56:53 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../header/minishell.h"
+#include "../include/minishell.h"
 
 t_cmd	*parse_data(char *str)
 {

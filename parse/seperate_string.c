@@ -6,11 +6,11 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 07:38:45 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/13 09:58:04 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/17 10:56:53 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../header/minishell.h"
+#include "../include/minishell.h"
 
 
 char	*read_string_before_white_quote(char *str, t_list **root)

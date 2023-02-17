@@ -6,11 +6,11 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 02:30:16 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/16 02:38:20 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/17 10:56:53 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../header/minishell.h"
+#include "../../include/minishell.h"
 
 void	free_double_pointer(char **args)
 {

@@ -6,11 +6,11 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 10:53:47 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/15 11:17:29 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/17 10:56:53 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../header/minishell.h"
+#include "../include/minishell.h"
 
 void	minishell_error(char *error_msg)
 {

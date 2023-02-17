@@ -6,7 +6,7 @@
 #    By: codespace <codespace@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/25 13:03:12 by seokjyoo          #+#    #+#              #
-#    Updated: 2023/02/16 19:23:19 by gychoi           ###   ########.fr        #
+#    Updated: 2023/02/17 10:57:23 by codespace        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ CFLAG		=	-g#-Wall -Wextra -Werror
 RM			=	rm -rf
 
 
-SRC			=	./main/main.c \
+SRC			=	./main.c \
 				./parse/parse_data.c \
 				./parse/parse_meta.c \
 				./parse/parse_meta2.c \
@@ -31,7 +31,7 @@ SRC			=	./main/main.c \
 				./parse/final_parse/final_parse_lst.c \
 				./parse/final_parse/final_parse.c \
 				./error_handle/minishell_error.c \
-				./gnl/get_next_line.c \
+				./parse/redi_process/get_next_line.c \
 				./execute/execute.c \
 
 OBJ			=	$(SRC:.c=.o)
