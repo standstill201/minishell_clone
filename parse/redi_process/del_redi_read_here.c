@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 08:40:31 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/17 10:56:53 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/17 11:49:29 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,26 +59,6 @@ t_list	*redi_input(t_list *temp)
 		minishell_error(temp->content);
 	return (temp);
 }
-
-// int	here_doc_quote(int fd)
-// {
-// 	char	*line;
-// 	char	*tmp;
-// 	int		return_fd;
-
-// 	return_fd = create_temp_file();
-// 	tmp = get_next_line(fd, 0);
-// 	line = ft_strjoin(tmp, "\n");
-// 	free(tmp);
-// 	while (ft_strlen(line) > 1)
-// 	{
-		
-// 		tmp = get_next_line(fd, 0);
-// 		line = ft_strjoin(tmp, "\n");
-// 		free(tmp);
-// 	}
-// }
-// << redirect 파싱의 찌꺼기. 해야 할 필요성이 없었으요
 
 t_list	*redi_heredoc(t_list *temp)
 {
