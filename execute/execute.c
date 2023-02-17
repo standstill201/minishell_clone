@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 01:08:42 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/17 11:28:34 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/17 11:33:32 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,7 +170,7 @@ static int	pipeline(t_cmd *node)
 }
 
 // fd_in, fd_out에 대해서도 다뤄야 한다.
-int	execute(t_cmd *root)
+int	execute(t_cmd *root, char **envp)
 {
 	t_cmd	*node;
 	pid_t	pid;
