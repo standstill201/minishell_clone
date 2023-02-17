@@ -6,7 +6,7 @@
 /*   By: gychoi <gychoi@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 01:08:42 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/16 22:01:35 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/17 19:18:44 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ static int	pipeline(t_cmd *node)
 }
 
 // fd_in, fd_out에 대해서도 다뤄야 한다.
-int	execute(t_cmd *root)
+int	execute(t_cmd *root, char **envp)
 {
 	t_cmd	*node;
 	pid_t	pid;
