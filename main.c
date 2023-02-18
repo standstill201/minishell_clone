@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 13:03:19 by seokjyoo          #+#    #+#             */
-/*   Updated: 2023/02/17 12:21:17 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/18 20:47:37 by ckgun            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	main(void)
 		if (line[0] != '\0')
 			add_history(line);
 		line_root = parse_data(line);
-		// execute(line_root);
+		execute(line_root);
 		t_cmd	*temp = line_root;
 		while (temp)
 		{

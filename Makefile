@@ -6,7 +6,7 @@
 #    By: codespace <codespace@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/25 13:03:12 by seokjyoo          #+#    #+#              #
-#    Updated: 2023/02/17 11:14:18 by codespace        ###   ########.fr        #
+#    Updated: 2023/02/18 23:55:44 by ckgun            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,6 +31,7 @@ SRC			=	./main.c \
 				./parse/final_parse/final_parse_lst.c \
 				./parse/final_parse/final_parse.c \
 				./error_handle/minishell_error.c \
+				./error_handle/execute_error.c \
 				./parse/redi_process/get_next_line.c \
 				./execute/execute.c \
 

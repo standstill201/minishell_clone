@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 01:08:42 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/17 11:45:52 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/19 00:14:57 by ckgun            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,14 @@
 #include <stdio.h> // must delete!
 
 extern char	**environ;	// 임시 env
+
+void	is_directory(t_cmd *node)
+{
+	struct stat	sb;
+
+	if (stat(node->cmd, &sb) == 0 && S_ISDIR(sb.st_mode))
+		minishell_error("is a directory"); // not error!
+}
 
 char	*find_path(char *command)
 {
@@ -44,20 +52,24 @@ char	*find_path(char *command)
 	return (find);
 }
 
+// 확장된 환경변수는 어떻게 처리하지...?
 int	execute_command(t_cmd *node)
 {
 	char	*command;
 	char	*path;
 
+	if (ft_strchr(node->cmd, '/'))
+		minishell_error(node->cmd);
 	command = ft_strjoin("/", node->cmd);
 	path = find_path(command);
-	if (command == NULL || path == NULL)
+	printf("command: [%s], path: [%s]\n", command, path);
+	if (path == NULL || ft_strlen(node->cmd) == 0)
 		return (0);
 	if (execve(path, node->args, environ) == -1)
 	{
+		printf("EXECVE FAILED\n");
 		free(command);
 		free(path);
-		printf("EXECVE FAILED\n");
 		// free(args);
 	}
 	return (0);
@@ -151,24 +163,31 @@ static int	pipeline(t_cmd *node)
 	else if (pid == 0)
 	{
 		close(pfd[READ_END]);
-		dup2(pfd[WRITE_END], STDOUT_FILENO);
+		// 음... 애초에 0과 1로 세팅해준다면...?
+		if (node->fd_out == -2)
+			node->fd_out = STDOUT_FILENO;
+		dup2(pfd[WRITE_END], node->fd_out);
 		close(pfd[WRITE_END]);
 		// need to check error message
+		if (ft_strchr(node->cmd, '/'))
+			is_directory(node);
 		if (!execute_builtin(node))
 			if (!execute_command(node))
-				minishell_error("command not found\n");
+				// error 시 연결리스트 해제 필요.
+				command_not_found(node->cmd);
 	}
 	else
 	{
-		close(pfd[WRITE_END]);
-		dup2(pfd[READ_END], STDIN_FILENO);
-		close(pfd[READ_END]);
 		waitpid(pid, &status, 0);
+		close(pfd[WRITE_END]);
+		if (node->fd_in == -2)
+			node->fd_in = STDIN_FILENO;
+		dup2(pfd[READ_END], node->fd_in);
+		close(pfd[READ_END]);
 	}
 	return (status);
 }
 
-// fd_in, fd_out에 대해서도 다뤄야 한다.
 int	execute(t_cmd *root)
 {
 	t_cmd	*node;
@@ -188,9 +207,12 @@ int	execute(t_cmd *root)
 			node = node->next;
 		}
 		// need to check error message
+		// 극혐 구조! 구조에 대한 고민을 하자.
+		if (ft_strchr(node->cmd, '/'))
+			is_directory(node);
 		if (!execute_builtin(node))
 			if (!execute_command(node))
-				minishell_error("command not found\n");
+				command_not_found(node->cmd);
 	}
 	else
 		waitpid(pid, &status, 0);
