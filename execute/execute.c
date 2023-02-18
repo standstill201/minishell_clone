@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 01:08:42 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/19 00:14:57 by ckgun            ###   ########.fr       */
+/*   Updated: 2023/02/19 01:53:32 by ckgun            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	*find_path(char *command)
 	if (access(command, F_OK | X_OK) == 0)
 		return (command);
 	i = 0;
-	while (ft_strncmp(environ[i], "PATH=", 5))
+	while (environ[i] && ft_strncmp(environ[i], "PATH=", 5))
 		i++;
 	if (environ[i] == NULL)
 		return (NULL);
