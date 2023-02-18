@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 01:08:42 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/17 11:33:32 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/17 11:45:52 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,39 +138,38 @@ int	execute_builtin(t_cmd *node)
 // 	}
 // 	return (status);
 // }
-
 static int	pipeline(t_cmd *node)
 {
-    int		pfd[2];
-    int		status;
-    pid_t	pid;
- 
-    pipe(pfd);
-    pid = fork();
-    if (pid == -1)
-        minishell_error("fork error");
-    else if (pid == 0)
-    {
-        close(pfd[READ_END]);
-        dup2(pfd[WRITE_END], STDOUT_FILENO);
-        close(pfd[WRITE_END]);
-        // need to check error message
-        if (!execute_builtin(node))
-            if (!execute_command(node))
-                minishell_error("command not found\n");
-    }
-    else
-    {
-        close(pfd[WRITE_END]);
-        dup2(pfd[READ_END], STDIN_FILENO);
-        close(pfd[READ_END]);
-        waitpid(pid, &status, 0);
-    }
-    return (status);
+	int		pfd[2];
+	int		status;
+	pid_t	pid;
+
+	pipe(pfd);
+	pid = fork();
+	if (pid == -1)
+		minishell_error("fork error");
+	else if (pid == 0)
+	{
+		close(pfd[READ_END]);
+		dup2(pfd[WRITE_END], STDOUT_FILENO);
+		close(pfd[WRITE_END]);
+		// need to check error message
+		if (!execute_builtin(node))
+			if (!execute_command(node))
+				minishell_error("command not found\n");
+	}
+	else
+	{
+		close(pfd[WRITE_END]);
+		dup2(pfd[READ_END], STDIN_FILENO);
+		close(pfd[READ_END]);
+		waitpid(pid, &status, 0);
+	}
+	return (status);
 }
 
 // fd_in, fd_out에 대해서도 다뤄야 한다.
-int	execute(t_cmd *root, char **envp)
+int	execute(t_cmd *root)
 {
 	t_cmd	*node;
 	pid_t	pid;

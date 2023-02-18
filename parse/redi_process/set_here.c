@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 08:10:08 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/17 10:56:53 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/17 11:52:18 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ void	handle_here_word(t_list *temp)
 			temp->is_here_quote_word = 1;
 		temp->is_single_quote = 1;
 		temp->is_here_word = 1;
-		temp = temp->next;
+		if (temp)
+			temp = temp->next;
 	}
 }
 
@@ -43,3 +44,4 @@ void	set_here(t_list **parse_separate)
 		}
 	}
 }
+

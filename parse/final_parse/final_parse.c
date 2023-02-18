@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 11:28:00 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/17 10:56:53 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/17 12:14:20 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,9 @@ t_list	*cmd_parser(t_list *pre_temp, char **cmd)
 	int		index;
 
 	index = 0;
-	while (pre_temp->is_meta == 1)
+	while (pre_temp && (pre_temp->is_meta == 1 || pre_temp->is_here_word == 1
+			|| pre_temp->is_fd_input == 1 || pre_temp->is_fd_new == 1
+			|| pre_temp->is_fd_add == 1))
 		pre_temp = pre_temp->next;
 	if (pre_temp)
 		*cmd = ft_strdup(pre_temp->content);
@@ -97,11 +99,12 @@ void	add_t_cmd(t_cmd **return_val, t_list *pre_temp, t_list *temp)
 
 	index = pipe_size_check(pre_temp, temp);
 	fds = out_in_fd(pre_temp, temp);
-	// if (index == 0)
-	// 	minishell_error("syntax error near unexpected token `|'");
 	pre_temp = cmd_parser(pre_temp, &cmd);
 	if (!cmd)
-		args = NULL;
+	{
+		args = (char **)malloc(sizeof(char *) * 1);
+		args[0] = NULL;
+	}
 	else
 	{
 		args = (char **)malloc(sizeof(char *) * (index) + 1);
