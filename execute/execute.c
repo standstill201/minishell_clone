@@ -6,14 +6,12 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 01:08:42 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/19 01:53:32 by ckgun            ###   ########.fr       */
+/*   Updated: 2023/02/20 00:11:55 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/execute.h"
 #include <stdio.h> // must delete!
-
-extern char	**environ;	// 임시 env
 
 void	is_directory(t_cmd *node)
 {
@@ -23,7 +21,7 @@ void	is_directory(t_cmd *node)
 		minishell_error("is a directory"); // not error!
 }
 
-char	*find_path(char *command)
+char	*find_path(char *command, char **envp)
 {
 	int		i;
 	char	*path;
@@ -33,11 +31,11 @@ char	*find_path(char *command)
 	if (access(command, F_OK | X_OK) == 0)
 		return (command);
 	i = 0;
-	while (environ[i] && ft_strncmp(environ[i], "PATH=", 5))
+	while (envp[i] && ft_strncmp(envp[i], "PATH=", 5))
 		i++;
-	if (environ[i] == NULL)
+	if (envp[i] == NULL)
 		return (NULL);
-	paths = ft_split(environ[i] + 5, ':');
+	paths = ft_split(envp[i] + 5, ':');
 	i = 0;
 	find = NULL;
 	while (paths[i])
@@ -53,19 +51,21 @@ char	*find_path(char *command)
 }
 
 // 확장된 환경변수는 어떻게 처리하지...?
-int	execute_command(t_cmd *node)
+int	execute_command(t_cmd *node, t_env *environ)
 {
 	char	*command;
 	char	*path;
+	char	**envp;
 
 	if (ft_strchr(node->cmd, '/'))
 		minishell_error(node->cmd);
 	command = ft_strjoin("/", node->cmd);
-	path = find_path(command);
+	envp = get_environ(environ);
+	path = find_path(command, envp);
 	printf("command: [%s], path: [%s]\n", command, path);
 	if (path == NULL || ft_strlen(node->cmd) == 0)
 		return (0);
-	if (execve(path, node->args, environ) == -1)
+	if (execve(path, node->args, envp) == -1)
 	{
 		printf("EXECVE FAILED\n");
 		free(command);
@@ -77,7 +77,7 @@ int	execute_command(t_cmd *node)
 
 // env에 대한 정보가 필요하다.
 // return value에 대한 고민
-int	execute_builtin(t_cmd *node)
+int	execute_builtin(t_cmd *node, t_env *environ)
 {
 	int	ret;
 
@@ -121,36 +121,7 @@ int	execute_builtin(t_cmd *node)
 }
 
 // need to add FUNCTION_GUARD
-// static int	pipeline(t_cmd *node)
-// {
-// 	int		pfd[2];
-// 	int		status;
-// 	pid_t	pid;
-
-// 	pipe(pfd);
-// 	pid = fork();
-// 	if (pid == -1)
-// 		minishell_error("fork error");
-// 	else if (pid == 0)
-// 	{
-// 		close(pfd[READ_END]);
-// 		dup2(pfd[WRITE_END], STDOUT_FILENO);
-// 		close(pfd[WRITE_END]);
-// 		// need to check error message
-// 		if (!execute_builtin(node))
-// 			if (!execute_command(node))
-// 				minishell_error("command not found\n");
-// 	}
-// 	else
-// 	{
-// 		waitpid(pid, &status, WNOHANG);
-// 		close(pfd[WRITE_END]);
-// 		dup2(pfd[READ_END], STDIN_FILENO);
-// 		close(pfd[READ_END]);
-// 	}
-// 	return (status);
-// }
-static int	pipeline(t_cmd *node)
+static int	pipeline(t_cmd *node, t_env *environ)
 {
 	int		pfd[2];
 	int		status;
@@ -171,8 +142,8 @@ static int	pipeline(t_cmd *node)
 		// need to check error message
 		if (ft_strchr(node->cmd, '/'))
 			is_directory(node);
-		if (!execute_builtin(node))
-			if (!execute_command(node))
+		if (!execute_builtin(node, environ))
+			if (!execute_command(node, environ))
 				// error 시 연결리스트 해제 필요.
 				command_not_found(node->cmd);
 	}
@@ -188,7 +159,7 @@ static int	pipeline(t_cmd *node)
 	return (status);
 }
 
-int	execute(t_cmd *root)
+int	execute(t_cmd *root, t_env *environ)
 {
 	t_cmd	*node;
 	pid_t	pid;
@@ -203,15 +174,15 @@ int	execute(t_cmd *root)
 		while (node->next != NULL)
 		{
 			// should get return value
-			pipeline(node);
+			pipeline(node, environ);
 			node = node->next;
 		}
 		// need to check error message
 		// 극혐 구조! 구조에 대한 고민을 하자.
 		if (ft_strchr(node->cmd, '/'))
 			is_directory(node);
-		if (!execute_builtin(node))
-			if (!execute_command(node))
+		if (!execute_builtin(node, environ))
+			if (!execute_command(node, environ))
 				command_not_found(node->cmd);
 	}
 	else

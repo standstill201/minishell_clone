@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 13:04:12 by seokjyoo          #+#    #+#             */
-/*   Updated: 2023/02/16 19:45:25 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/19 20:06:50 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 
 # include "../LIBFT/libft.h"
 # include "execute.h"
+# include "environ.h"
 
 #define LINE_SPILL 0
 

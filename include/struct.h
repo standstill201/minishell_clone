@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 04:24:16 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/15 11:44:11 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/19 21:07:27 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ typedef struct s_list
 	int				fd;
 	struct s_list	*next;
 }	t_list;
+
 typedef struct s_cmd
 {
 	char			*cmd;
@@ -41,7 +42,7 @@ typedef struct s_env
 {
 	char			*key;
 	char			*val;
-	struct s_cmd	*next;
+	struct s_env	*next;
 }	t_env;
 
 #endif

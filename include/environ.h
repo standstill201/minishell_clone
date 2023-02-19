@@ -1,28 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute.h                                          :+:      :+:    :+:   */
+/*   environ.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gychoi <gychoi@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/16 19:19:23 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/20 00:09:55 by gychoi           ###   ########.fr       */
+/*   Created: 2023/02/19 20:06:26 by gychoi            #+#    #+#             */
+/*   Updated: 2023/02/20 00:10:51 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef EXECUTE_H
-# define EXECUTE_H
+#ifndef ENVIRON_H
+# define ENVIRON_H
 
 # include "minishell.h"
-# include "environ.h"
-# include <sys/wait.h>
-# include <sys/stat.h>
+# include "struct.h"
 
-# define READ_END	0
-# define WRITE_END	1
-
-int	execute(t_cmd *root, t_env *environ);
-
-void	command_not_found(char *command);
+t_env	*env_lstnew(char **envp);
+t_env	*env_lstlast(t_env *envs);
+void	env_lstadd_back(t_env **environ, t_env *new);
+void	env_lstclear(t_env *environ);
+int		env_lstlen(t_env *environ);
+t_env	*set_environ(char **envp);
+void	add_environ(t_env *environ, char *key, char *val);
+void	delete_environ(t_env *environ, char *key);
+char	**get_environ(t_env *environ);
 
 #endif

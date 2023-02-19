@@ -6,17 +6,20 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 13:03:19 by seokjyoo          #+#    #+#             */
-/*   Updated: 2023/02/18 20:47:37 by ckgun            ###   ########.fr       */
+/*   Updated: 2023/02/20 00:05:48 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./include/minishell.h"
 
-int	main(void)
+// fix argc, argv
+int	main(int argc, char **argv, char **envp)
 {
 	char	*line;
 	t_cmd	*line_root;
+	t_env	*environ;
 
+	environ = set_environ(envp);
 	while (1)
 	{
 		line = readline("minishell$ ");
@@ -25,7 +28,7 @@ int	main(void)
 		if (line[0] != '\0')
 			add_history(line);
 		line_root = parse_data(line);
-		execute(line_root);
+		execute(line_root, environ);
 		t_cmd	*temp = line_root;
 		while (temp)
 		{
