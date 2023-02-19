@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 11:28:00 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/17 12:14:20 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/19 12:49:48 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,6 @@ t_cmd	*final_parse(t_list **pre_lst)
 			add_t_cmd(&return_val, pre_temp, temp);
 		temp = temp->next;
 	}
-	
 	ft_lstclear(pre_lst, free);
 	return (return_val);
 }
