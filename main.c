@@ -33,23 +33,16 @@ int	main(int argc, char **argv, char **envp)
 		while (temp)
 		{
 			printf("--------------------------\n");
-			printf("cmd: %s\n", temp->cmd);
+			printf("cmd:%s$\n", temp->cmd);
 			for (int i = 0; temp->args[i]; i++)
-				printf("args %d: %s\n", i, temp->args[i]);
+				printf("args%d:%s$\n", i, temp->args[i]);
 			printf("fd_in: %d\n", temp->fd_in);
-			// read fd_in
-//				char buf[100];
-//				int ret = read(temp->fd_in, buf, 100);	
-//				buf[ret] = '\0';
-//				printf("buf: %s\n", buf);
 			printf("fd_out: %d\n", temp->fd_out);
 			printf("pipe_n: %d\n", temp->pipe_n);
 			printf("--------------------------\n");
 			temp = temp->next;
 		}
 		free(line);
-//		while(1)
-//			continue ;
 	}
 }
 

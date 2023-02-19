@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 07:35:29 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/17 10:56:53 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/19 13:17:18 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,23 @@ t_list	*merge_string(t_list **root)
 	return (return_val);
 }
 
+void	del_empty_envirnment(t_list **root, t_list *temp)
+{
+	t_list	*pre_temp;
+
+	pre_temp = *root;
+	while (pre_temp)
+	{
+		if (pre_temp->next == temp)
+		{
+			pre_temp->next = temp->next;
+			ft_lstdelone(temp, free);
+			break ;
+		}
+		pre_temp = pre_temp->next;
+	}
+}
+
 void	set_env(t_list **root)
 {
 	t_list	*temp;
@@ -98,7 +115,10 @@ void	set_env(t_list **root)
 			return_val = getenv(temp->content + 1);
 			free(temp->content);
 			if (return_val == NULL)
-				temp->content = ft_strdup("");
+			{
+				ft_strdup("");
+				del_empty_envirnment(root, temp);
+			}
 			else
 				temp->content = ft_strdup(return_val);
 		}
