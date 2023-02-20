@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 07:28:27 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/17 11:10:41 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/20 11:31:04 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ char	*read_string_before_pipe(char *str, t_list **root)
 	str++;
 	if (*str == '|')
 	{
-		printf("temp: syntax error near unexpected token \'|\'\n");
+		ft_putstr_fd("minishell: syntax error near unexpected token `|\'\n", 2);
 		exit(1);
 	}
 	return_val = (char *)malloc(sizeof(char) * 2);
@@ -98,7 +98,7 @@ char	*parse_meta(char *str, t_list **root)
 		return_val = read_string_before_dollar(str, root);
 	else
 	{
-		ft_putstr_fd("temp: syntax error near unexpected token `", 2);
+		ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
 		ft_putchar_fd(*str, 2);
 		ft_putstr_fd("\'\n", 2);
 		exit(1);

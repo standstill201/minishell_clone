@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 07:38:45 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/19 10:48:50 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/20 11:53:34 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	handle_first_pipe(t_list **root)
 	if (tmp && tmp->is_meta && tmp->content[0] == '|')
 	{
 		ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
-		exit(1);
+		exit(2);
 	}
 }
 
