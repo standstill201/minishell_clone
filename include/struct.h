@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 04:24:16 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/19 21:07:27 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/20 17:50:00 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ typedef struct s_env
 {
 	char			*key;
 	char			*val;
+	int				export;
 	struct s_env	*next;
 }	t_env;
 

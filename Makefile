@@ -6,7 +6,7 @@
 #    By: codespace <codespace@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/25 13:03:12 by seokjyoo          #+#    #+#              #
-#    Updated: 2023/02/20 00:04:13 by gychoi           ###   ########.fr        #
+#    Updated: 2023/02/20 20:55:11 by gychoi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,7 +35,8 @@ SRC			=	./main.c \
 				./parse/redi_process/get_next_line.c \
 				./execute/execute.c \
 				./environ/environ.c \
-				./environ/environ_utils.c
+				./environ/environ_utils.c \
+				./builtin/ft_cd.c \
 
 OBJ			=	$(SRC:.c=.o)
 

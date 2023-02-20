@@ -6,7 +6,7 @@
 /*   By: gychoi <gychoi@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 20:05:27 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/20 14:12:02 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/20 17:57:21 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,18 @@ void	delete_environ(t_env *environ, char *key)
 		}
 		environ = environ->next;
 	}
+	if (environ->next == NULL)
+	{
+		if (ft_strncmp(environ->key, key, ft_strlen(environ->key) + 1) == 0)
+		{
+			free(environ->key);
+			free(environ->val);
+			free(environ);
+		}
+	}
 }
 
-void	add_environ(t_env *environ, char *key, char *val)
+void	add_environ(t_env *environ, char *key, char *val, int export)
 {
 	t_env	*new;
 
@@ -84,6 +93,7 @@ void	add_environ(t_env *environ, char *key, char *val)
 		// minishell error
 	new->key = key;
 	new->val = val;
+	new->export = export;
 	new->next = NULL;
 	env_lstadd_back(&environ, new);
 }
@@ -108,49 +118,49 @@ t_env	*set_environ(char **envp)
 	}
 	return (environ);
 }
-
-#include <stdio.h>
-#include <stdlib.h>
-void	leak_check(void)
-{
-	system("leaks --list -- a.out");
-}
-
-int	main(int argc, char **argv, char **envp)
-{
-	t_env	*environ;
-	t_env	*cur;
-	char	*key;
-	char	*value;
-	char	**env_list;
-	char	*find_env;
-	int		i;
-
-	environ = set_environ(envp);
-	key = ft_strdup("test key");
-	value = ft_strdup("test value");
-	add_environ(environ, key, value);
-	delete_environ(environ, "PATH");
-	delete_environ(environ, "LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOONG");
-	env_list = get_environ(environ);
-	i = 0;
-	while (env_list[i] != NULL)
-	{
-		printf("%s\n", env_list[i]);
-		i++;
-	}
-	find_env = get_env(environ, "USER");
-	printf("find: %s\n", find_env);
-	find_env = get_env(environ, "LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOONG");
-	printf("find: %s\n", find_env);
-	env_lstclear(environ);
-	i = 0;
-	while (env_list[i] != NULL)
-	{
-		free(env_list[i]);
-		i++;
-	}
-	free(env_list);
-	atexit(leak_check);
-	return (0);
-}
+//
+//#include <stdio.h>
+//#include <stdlib.h>
+//void	leak_check(void)
+//{
+//	system("leaks --list -- a.out");
+//}
+//
+//int	main(int argc, char **argv, char **envp)
+//{
+//	t_env	*environ;
+//	t_env	*cur;
+//	char	*key;
+//	char	*value;
+//	char	**env_list;
+//	char	*find_env;
+//	int		i;
+//
+//	environ = set_environ(envp);
+//	key = ft_strdup("test key");
+//	value = ft_strdup("test value");
+//	add_environ(environ, key, value, 1);
+//	delete_environ(environ, "PATH");
+//	delete_environ(environ, "LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOONG");
+//	env_list = get_environ(environ);
+//	i = 0;
+//	while (env_list[i] != NULL)
+//	{
+//		printf("%s\n", env_list[i]);
+//		i++;
+//	}
+//	find_env = get_env(environ, "USER");
+//	printf("find: %s\n", find_env);
+//	find_env = get_env(environ, "LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOONG");
+//	printf("find: %s\n", find_env);
+//	env_lstclear(environ);
+//	i = 0;
+//	while (env_list[i] != NULL)
+//	{
+//		free(env_list[i]);
+//		i++;
+//	}
+//	free(env_list);
+//	atexit(leak_check);
+//	return (0);
+//}

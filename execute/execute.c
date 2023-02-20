@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 01:08:42 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/20 00:11:55 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/20 21:35:50 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ char	*find_path(char *command, char **envp)
 	return (find);
 }
 
-// 확장된 환경변수는 어떻게 처리하지...?
 int	execute_command(t_cmd *node, t_env *environ)
 {
 	char	*command;
@@ -88,10 +87,7 @@ int	execute_builtin(t_cmd *node, t_env *environ)
 		exit(1);
 	}
 	else if (ft_strncmp(node->cmd, "cd", 3) == 0)
-	{
-		ft_putstr_fd("PROD: CD EXECUTED\n", 1);
 		exit(1);
-	}
 	else if (ft_strncmp(node->cmd, "pwd", 4) == 0)
 	{
 		ft_putstr_fd("PROD: PWD EXECUTED\n", 1);
@@ -166,11 +162,11 @@ int	execute(t_cmd *root, t_env *environ)
 	int		status;
 
 	pid = fork();
+	node = root;
 	if (pid == -1)
 		minishell_error("fork error");
 	else if (pid == 0)
 	{
-		node = root;
 		while (node->next != NULL)
 		{
 			// should get return value
@@ -186,6 +182,10 @@ int	execute(t_cmd *root, t_env *environ)
 				command_not_found(node->cmd);
 	}
 	else
+	{
 		waitpid(pid, &status, 0);
+		if (ft_strncmp(node->cmd, "cd", 3) == 0)
+			chdir(ft_cd_master(node, environ));
+	}
 	return (WEXITSTATUS(status));
 }
