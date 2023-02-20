@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 08:40:31 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/17 11:49:29 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/20 12:29:52 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,8 @@ t_list	*redi_heredoc(t_list *temp)
 		temp->fd = read_heredoc_infile(temp->content);
 	else
 	{
-		ft_putstr_fd("I think we've pretty fucked up\n", 2);
-		exit(1);
+		ft_putstr_fd("bash: syntax error near unexpected token `newline\'\n", 2);
+		exit(2);
 	}
 	return (temp);
 }
@@ -96,5 +96,4 @@ void	del_redi_read_here(t_list **merged_lst)
 			temp = redi_input(temp);
 		temp = temp->next;
 	}
-	temp = *merged_lst;
 }

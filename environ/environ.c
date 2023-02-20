@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   environ.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gychoi <gychoi@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 20:05:27 by gychoi            #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2023/02/20 17:57:21 by gychoi           ###   ########.fr       */
+=======
+/*   Updated: 2023/02/20 07:46:20 by codespace        ###   ########.fr       */
+>>>>>>> 98773ca3979b4d8fba231b791d099fb0664f038f
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +122,7 @@ t_env	*set_environ(char **envp)
 	}
 	return (environ);
 }
+<<<<<<< HEAD
 //
 //#include <stdio.h>
 //#include <stdlib.h>
@@ -164,3 +169,51 @@ t_env	*set_environ(char **envp)
 //	atexit(leak_check);
 //	return (0);
 //}
+=======
+
+// #include <stdio.h>
+// #include <stdlib.h>
+// void	leak_check(void)
+// {
+// 	system("leaks --list -- a.out");
+// }
+
+// int	main(int argc, char **argv, char **envp)
+// {
+// 	t_env	*environ;
+// 	t_env	*cur;
+// 	char	*key;
+// 	char	*value;
+// 	char	**env_list;
+// 	char	*find_env;
+// 	int		i;
+
+// 	environ = set_environ(envp);
+// 	key = ft_strdup("test key");
+// 	value = ft_strdup("test value");
+// 	add_environ(environ, key, value);
+// 	delete_environ(environ, "PATH");
+// 	delete_environ(environ, "LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOONG");
+// 	env_list = get_environ(environ);
+// 	i = 0;
+// 	while (env_list[i] != NULL)
+// 	{
+// 		printf("%s\n", env_list[i]);
+// 		i++;
+// 	}
+// 	find_env = get_env(environ, "USER");
+// 	printf("find: %s\n", find_env);
+// 	find_env = get_env(environ, "LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOONG");
+// 	printf("find: %s\n", find_env);
+// 	env_lstclear(environ);
+// 	i = 0;
+// 	while (env_list[i] != NULL)
+// 	{
+// 		free(env_list[i]);
+// 		i++;
+// 	}
+// 	free(env_list);
+// 	atexit(leak_check);
+// 	return (0);
+// }
+>>>>>>> 98773ca3979b4d8fba231b791d099fb0664f038f

@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 13:04:12 by seokjyoo          #+#    #+#             */
-/*   Updated: 2023/02/19 20:06:50 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/20 11:24:56 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <fcntl.h>
+# include <errno.h>
 
 # include "../LIBFT/libft.h"
 # include "execute.h"
@@ -26,10 +27,10 @@
 #define LINE_SPILL 0
 
 // parse_part
-t_cmd	*parse_data(char *str);
+t_cmd	*parse_data(char *str, int status);
 t_list	*seperate_string(char *str);
 void	set_pipe_n(t_list **root);
-void	set_env(t_list **root);
+void	set_env(t_list **root, int status);
 // heredoc_part
 void	set_here(t_list **pre_parse);
 int	read_heredoc_infile(char *limiter);

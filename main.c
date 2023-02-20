@@ -6,68 +6,119 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 13:03:19 by seokjyoo          #+#    #+#             */
-/*   Updated: 2023/02/20 00:05:48 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/20 11:41:13 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./include/minishell.h"
 
 // fix argc, argv
-int	main(int argc, char **argv, char **envp)
+// int	main(int argc, char **argv, char **envp)
+// {
+// 	char	*line;
+// 	t_cmd	*line_root;
+// 	t_env	*environ;
+// 	pid_t	pid;
+
+// 	environ = set_environ(envp);
+// 	while (1)
+// 	{
+// 		pid = fork();
+// 		if (pid < 0)
+// 		{
+// 			ft_putstr_fd("fork error\n", 2);
+// 			exit(1);
+// 		}
+// 		else if (pid == 0)
+// 		{
+// 			line = readline("minishell$ ");
+// 			if (!line)
+// 				break;
+// 			if (line[0] != '\0')
+// 				add_history(line);
+// 			line_root = parse_data(line);
+// 			execute(line_root, environ);
+// 			t_cmd	*temp = line_root;
+// 			while (temp)
+// 			{
+// 				printf("--------------------------\n");
+// 				printf("cmd:%s$\n", temp->cmd);
+// 				for (int i = 0; temp->args[i]; i++)
+// 					printf("args%d:%s$\n", i, temp->args[i]);
+// 				printf("fd_in: %d\n", temp->fd_in);
+// 				printf("fd_out: %d\n", temp->fd_out);
+// 				printf("pipe_n: %d\n", temp->pipe_n);
+// 				printf("--------------------------\n");
+// 				temp = temp->next;
+// 			}
+// 			free(line);
+// 			exit(0);
+// 		}
+// 		else
+// 			wait(NULL);
+// 	}
+// }
+void handle_child_process(t_env *environ, int status)
 {
 	char	*line;
 	t_cmd	*line_root;
-	t_env	*environ;
 
+	line = readline("minishell$ ");
+	if (!line)
+		exit(0);
+	if (line[0] != '\0')
+		add_history(line);
+	line_root = parse_data(line, status);
+	execute(line_root, environ);
+	t_cmd *temp = line_root;
+	while (temp)
+	{
+		printf("--------------------------\n");
+		printf("cmd:%s$\n", temp->cmd);
+		for (int i = 0; temp->args[i]; i++)
+			printf("args%d:%s$\n", i, temp->args[i]);
+		printf("fd_in: %d\n", temp->fd_in);
+		printf("fd_out: %d\n", temp->fd_out);
+		printf("pipe_n: %d\n", temp->pipe_n);
+		printf("--------------------------\n");
+		temp = temp->next;
+	}
+	free(line);
+	exit(0);
+}
+
+int	handle_parent_process()
+{
+	int	status;
+	
+	wait(&status);
+	return(status);
+}
+
+int main(int argc, char **argv, char **envp)
+{
+	t_env	*environ;
+	int		status;
+
+	status = 0;
 	environ = set_environ(envp);
 	while (1)
 	{
-		line = readline("minishell$ ");
-		if (!line)
-			break;
-		if (line[0] != '\0')
-			add_history(line);
-		line_root = parse_data(line);
-		execute(line_root, environ);
-		t_cmd	*temp = line_root;
-		while (temp)
+		printf("status: %d\n", WEXITSTATUS(status));
+		pid_t pid = fork();
+		if (pid < 0)
 		{
-			printf("--------------------------\n");
-			printf("cmd:%s$\n", temp->cmd);
-			for (int i = 0; temp->args[i]; i++)
-				printf("args%d:%s$\n", i, temp->args[i]);
-			printf("fd_in: %d\n", temp->fd_in);
-			printf("fd_out: %d\n", temp->fd_out);
-			printf("pipe_n: %d\n", temp->pipe_n);
-			printf("--------------------------\n");
-			temp = temp->next;
+			ft_putstr_fd("fork error\n", 2);
+			exit(1);
 		}
-		free(line);
+		else if (pid == 0)
+		{
+			handle_child_process(environ, status);
+		}
+		else
+		{
+			status = handle_parent_process();
+		}
 	}
+	return 0;
 }
-
-// int main(int ac, char *av[])
-// {
-// 	t_list	*return_val;
-// 	char	**return_val_char;
-// 	int		index;
-
-// 	index = 0;
-// 	return_val = seperate_string("< infile cat");
-// 	set_pipe_n(&return_val);
-// 	set_env(&return_val);
-// 	t_list	*temp = merge_string(&return_val);
-// 	while (temp)
-// 	{
-// 		printf("--------------------------\n");
-// 		printf("is_meta: %d\n", temp->is_meta);
-// 		printf("pipe_n: %d\n", temp->pipe_n);
-// 		printf("content: $%s$\n", temp->content);
-// 		printf("--------------------------\n");
-// 		temp = temp->next;
-// 	}
-// 	// ft_lstclear(&(temp->next), free);
-// 	// free(temp->content);
-// 	// free(temp);
-// 	return (0);
-// }
