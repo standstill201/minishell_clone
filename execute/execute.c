@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 01:08:42 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/20 00:11:55 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/20 11:43:25 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,7 @@ static int	pipeline(t_cmd *node, t_env *environ)
 	return (status);
 }
 
-int	execute(t_cmd *root, t_env *environ)
+void	execute(t_cmd *root, t_env *environ)
 {
 	t_cmd	*node;
 	pid_t	pid;
@@ -187,5 +187,5 @@ int	execute(t_cmd *root, t_env *environ)
 	}
 	else
 		waitpid(pid, &status, 0);
-	return (WEXITSTATUS(status));
+	exit(WEXITSTATUS(status));
 }
