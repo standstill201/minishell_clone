@@ -6,7 +6,7 @@
 /*   By: gychoi <gychoi@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 20:06:26 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/20 00:10:51 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/20 13:49:35 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,6 @@ t_env	*set_environ(char **envp);
 void	add_environ(t_env *environ, char *key, char *val);
 void	delete_environ(t_env *environ, char *key);
 char	**get_environ(t_env *environ);
+char	*get_env(t_env *environ, char *key);
 
 #endif
