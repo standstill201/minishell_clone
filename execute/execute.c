@@ -6,11 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 01:08:42 by gychoi            #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2023/02/20 21:35:50 by gychoi           ###   ########.fr       */
-=======
-/*   Updated: 2023/02/20 11:43:25 by codespace        ###   ########.fr       */
->>>>>>> 98773ca3979b4d8fba231b791d099fb0664f038f
+/*   Updated: 2023/02/20 21:51:32 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,12 +184,9 @@ void	execute(t_cmd *root, t_env *environ)
 	else
 	{
 		waitpid(pid, &status, 0);
-<<<<<<< HEAD
 		if (ft_strncmp(node->cmd, "cd", 3) == 0)
 			chdir(ft_cd_master(node, environ));
 	}
-	return (WEXITSTATUS(status));
-=======
-	exit(WEXITSTATUS(status));
->>>>>>> 98773ca3979b4d8fba231b791d099fb0664f038f
+	// cd 부모 프로세스에 전달할 수 있는 방법 고민
+//	return (WEXITSTATUS(status));
 }
