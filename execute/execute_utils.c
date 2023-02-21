@@ -6,7 +6,7 @@
 /*   By: gychoi <gychoi@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 15:23:08 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/21 16:58:01 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/21 20:41:56 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,13 +48,13 @@ int	execute_command(t_cmd *node, t_env *environ)
 	char	**envp;
 	int		i;
 
-	if (ft_strchr(node->cmd, '/'))
-		minishell_error(node->cmd);
+	if (ft_strchr(node->cmd, '/') && access(node->cmd, F_OK | X_OK) == -1)
+		execute_error(node->cmd);
 	command = ft_strjoin("/", node->cmd);
 	envp = get_environ(environ);
 	path = find_path(command, envp);
 	if (path == NULL || ft_strlen(node->cmd) == 0)
-		return (0);
+		return (1);
 	if (execve(path, node->args, envp) == -1)
 	{
 		free(command);
@@ -64,24 +64,26 @@ int	execute_command(t_cmd *node, t_env *environ)
 			free(envp[i++]);
 		free(envp);
 	}
+	printf("hello\n");
 	return (1);
 }
 
 void	ft_close(int fd)
 {
 	if (close(fd) == -1)
-		minishell_error("failed to close");
+		global_execute_error("failed to close\n");
 }
 
 void	ft_dup2(int fd1, int fd2)
 {
 	if (dup2(fd1, fd2) == -1)
-		minishell_error("falied to dup2");
-	ft_close(fd1);
+		global_execute_error("falied to dup2\n");
+	if (fd1 != -2)
+		ft_close(fd1);
 }
 
 void	ft_pipe(int *fd)
 {
 	if (pipe(fd) == -1)
-		minishell_error("failed to pipe");
+		global_execute_error("failed to pipe");
 }

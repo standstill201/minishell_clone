@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 01:08:42 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/21 17:11:38 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/21 20:49:39 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ int	execute_builtin(t_cmd *node, t_env *environ)
 	int	ret;
 
 	ret = 1;
+	if (node->cmd == NULL)
+		return (ret);
 	if (ft_strncmp(node->cmd, "echo", 5) == 0)
 		ret = ft_echo(node);
 	else if (ft_strncmp(node->cmd, "cd", 3) == 0)
@@ -54,27 +56,35 @@ int	execute_by_type(t_cmd *node, t_env *environ)
 {
 	struct stat	sb;
 	pid_t		pid;
-	int			status;
 
-	status = execute_builtin(node, environ);
-	if (status == 1)
+	set_fd(node);
+	if (execute_builtin(node, environ) == 1)
 	{
 		pid = fork();
 		if (pid == -1)
-			minishell_error("failed to fork");
+		{
+			reset_fd(node);
+			return (global_execute_error("failed to fork\n")); // exit?
+		}
 		else if (pid == 0)
 		{
 			if (stat(node->cmd, &sb) == 0 && S_ISDIR(sb.st_mode))
+			{
+				reset_fd(node);
 				is_a_directory(node->cmd);
-			status = execute_command(node, environ);
-			if (status == 1)
+			}
+			if (execute_command(node, environ) == 1)
+			{
+				reset_fd(node);
 				command_not_found(node->cmd);
+			}
 		}
 		else
 			if (waitpid(pid, NULL, 0) == -1)
-				minishell_error("failed to waitpid");
+				return (global_execute_error("failed to waitpid\n")); // 오류에 대해 모두 초기화?
 	}
-	return (status);
+	reset_fd(node);
+	return (1);
 }
 
 // need to add FUNCTION_GUARD
@@ -88,7 +98,7 @@ void	enter_pipeline(t_cmd *node, t_env *environ)
 	ft_pipe(pfd);
 	pid = fork();
 	if (pid == -1)
-		minishell_error("failed to fork");
+		global_execute_error("failed to fork");
 	else if (pid == 0)
 	{
 		ft_close(pfd[READ_END]);
@@ -100,7 +110,7 @@ void	enter_pipeline(t_cmd *node, t_env *environ)
 	else
 	{
 		if (waitpid(pid, NULL, 0) == -1)
-			minishell_error("failed to waitpid");
+			global_execute_error("failed to waitpid");
 		ft_close(pfd[WRITE_END]);
 		if (node->fd_in == -2)
 			node->fd_in = STDIN_FILENO;
@@ -112,13 +122,27 @@ void	enter_pipeline(t_cmd *node, t_env *environ)
 int	execute(t_cmd *commandline, t_env *environ)
 {
 	t_cmd	*node;
+	pid_t	pid;
 	int		status;
 
 	node = commandline;
-	while (node->next != NULL)
+	if (node->next != NULL)
 	{
-		enter_pipeline(node, environ);
-		node = node->next;
+		pid = fork();
+		if (pid == -1)
+			return (global_execute_error("falied to fork"));
+		else if (pid == 0)
+		{
+			while (node->next != NULL)
+			{
+				enter_pipeline(node, environ);
+				node = node->next;
+			}
+		}
+		else
+			if (waitpid(pid, NULL, 0) == -1)
+				return (global_execute_error("failed to fork"));
 	}
+	printf("fds: %d, %d, %d, %d\n", node->fd_in, node->fd_out, node->fd_old_in, node->fd_old_out);
 	return (execute_by_type(node, environ));
 }
