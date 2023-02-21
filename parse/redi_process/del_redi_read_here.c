@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 08:40:31 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/21 08:03:09 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/21 12:45:56 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,10 +89,17 @@ t_list	*redi_input(t_list *temp, int *status)
 
 t_list	*redi_heredoc(t_list *temp, int *status)
 {
+	t_list	*temp_first;
+
+	temp_first = temp;
 	while (temp && temp->is_here_word == 0)
 		temp = temp->next;
 	if (temp)
-		temp->fd = read_heredoc_infile(temp->content);
+	{
+		temp->fd = read_heredoc_infile(temp->content, temp_first, status);
+		if (temp->fd == -2)
+			return (0);
+	}
 	else
 	{
 		ft_putstr_fd("bash: syntax error near unexpected token `newline\'\n", 2);

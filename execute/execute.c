@@ -6,9 +6,10 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 01:08:42 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/21 22:11:29 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/21 12:18:20 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../include/execute.h"
 
@@ -155,3 +156,4 @@ int	execute(t_cmd *commandline, t_env *environ)
 		return (execute_by_type(node, environ));
 	}
 }
+
