@@ -6,6 +6,6 @@ char *return_chr(void)
 }
 int main(void)
 {
-	char *str = return_chr();
-	printf("%p", str);
+	int i= 0;
+	printf("%d\n", !i);
 }

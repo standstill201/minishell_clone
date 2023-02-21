@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 13:04:12 by seokjyoo          #+#    #+#             */
-/*   Updated: 2023/02/21 06:25:51 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/21 07:50:39 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ char	*read_string_before_dollar(char *str, t_list **root, int *status);
 // meta_parse_part end
 
 // redirection_part
-void	del_redi_read_here(t_list **merged_lst);
+int	del_redi_read_here(t_list **merged_lst, int *status);
 // redirection_part end
 
 // final_parse_part
@@ -68,10 +68,10 @@ void	organize_execute(t_list **root);
 // execute_part end
 
 // error_handle_part
-void	minishell_error(char *error_msg);
+int	minishell_error(char *error_msg, int *status);
 int	unexpected_token_error(char *token, int *status);
-void	unexpected_token_newline(void);
-void	unexpected_token_end(void);
+int	unexpected_token_newline(int *status);
+int	unexpected_token_end(int *status);
 // error_handle_part end
 
 
