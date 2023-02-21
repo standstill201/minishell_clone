@@ -6,7 +6,7 @@
 /*   By: gychoi <gychoi@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 01:31:40 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/22 03:32:47 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/22 03:39:33 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,14 +112,14 @@ void	pipeline(t_cmd *node, t_env *environ)
 	t_cmd	*cur;
 
 	cur = node;
-	if (cur->fd_in == -2)
-		cur->fd_in = STDIN_FILENO;
-	if (cur->fd_out == -2)
-		cur->fd_out = STDOUT_FILENO;
-	dup2(cur->fd_in, STDIN_FILENO);
-	dup2(cur->fd_out, STDOUT_FILENO);
 	while (cur->next != NULL)
 	{
+		if (cur->fd_in == -2)
+			cur->fd_in = STDIN_FILENO;
+		if (cur->fd_out == -2)
+			cur->fd_out = STDOUT_FILENO;
+		dup2(cur->fd_in, STDIN_FILENO);
+		dup2(cur->fd_out, STDOUT_FILENO);
 		pipeline_child(cur, environ);
 		cur = cur->next;
 	}
