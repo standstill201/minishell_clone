@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 13:04:12 by seokjyoo          #+#    #+#             */
-/*   Updated: 2023/02/20 11:24:56 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/21 06:25:51 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,12 @@
 #define LINE_SPILL 0
 
 // parse_part
-t_cmd	*parse_data(char *str, int status);
-t_list	*seperate_string(char *str);
+t_cmd	*parse_data(char *str, int *status);
+t_list	*seperate_string(char *str, int *status);
 void	set_pipe_n(t_list **root);
-void	set_env(t_list **root, int status);
+void	set_env(t_list **root, int *status);
 // heredoc_part
-void	set_here(t_list **pre_parse);
+int	set_here(t_list **pre_parse, int *status);
 int	read_heredoc_infile(char *limiter);
 int	create_temp_file(void);
 // heredoc_part end
@@ -43,11 +43,11 @@ t_list	*meta_add(t_list *temp, t_list **return_val);
 // merge_string_part end
 
 // meta_parse_part
-char	*parse_meta(char *str, t_list **root);
+char	*parse_meta(char *str, t_list **root, int *status);
 int		is_meta(char c);
 void	double_quote_task(char *return_val, t_list **root);
 char	*read_string_before_redirection(char *str, t_list **root);
-char	*read_string_before_dollar(char *str, t_list **root);
+char	*read_string_before_dollar(char *str, t_list **root, int *status);
 // meta_parse_part end
 
 // redirection_part
@@ -69,7 +69,7 @@ void	organize_execute(t_list **root);
 
 // error_handle_part
 void	minishell_error(char *error_msg);
-void	unexpected_token_error(char *token);
+int	unexpected_token_error(char *token, int *status);
 void	unexpected_token_newline(void);
 void	unexpected_token_end(void);
 // error_handle_part end

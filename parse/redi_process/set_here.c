@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 08:10:08 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/17 11:52:18 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/21 06:09:52 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	handle_here_word(t_list *temp)
 	}
 }
 
-void	set_here(t_list **parse_separate)
+int	set_here(t_list **parse_separate, int *status)
 {
 	t_list	*temp;
 
@@ -39,9 +39,10 @@ void	set_here(t_list **parse_separate)
 			while (temp && temp->is_meta && ft_iswhite(temp->content[0]))
 				temp = temp->next;
 			if (temp && temp->is_meta && !ft_iswhite(temp->content[0]))
-				unexpected_token_error(temp->content);
+				return (unexpected_token_error(temp->content, status));
 			handle_here_word(temp);
 		}
 	}
+	return (0);
 }
 

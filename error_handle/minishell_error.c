@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 10:53:47 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/20 07:53:22 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/21 06:13:23 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,13 @@ void	minishell_error(char *error_msg)
 	exit(1);
 }
 
-void	unexpected_token_error(char *token)
+int	unexpected_token_error(char *token, int *status)
 {
 	write(2, "minishell: syntax error near unexpected token `", 47);
 	write(2, token, ft_strlen(token));
 	write(2, "'\n", 2);
-	exit(1);
+	*status = 2;
+	return (1);
 }
 
 void	unexpected_token_newline(void)

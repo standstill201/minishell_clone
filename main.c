@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 13:03:19 by seokjyoo          #+#    #+#             */
-/*   Updated: 2023/02/20 11:41:13 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/21 06:38:59 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,11 +64,16 @@ void handle_child_process(t_env *environ, int status)
 	t_cmd	*line_root;
 
 	line = readline("minishell$ ");
-	if (!line)
-		exit(0);
+	// if (!line)
+	// 	exit(0);
 	if (line[0] != '\0')
 		add_history(line);
-	line_root = parse_data(line, status);
+	line_root = parse_data(line, &status);
+	if (!line_root)
+	{
+		free(line);
+		return ;
+	}
 	execute(line_root, environ);
 	t_cmd *temp = line_root;
 	while (temp)
@@ -84,15 +89,6 @@ void handle_child_process(t_env *environ, int status)
 		temp = temp->next;
 	}
 	free(line);
-	exit(0);
-}
-
-int	handle_parent_process()
-{
-	int	status;
-	
-	wait(&status);
-	return(status);
 }
 
 int main(int argc, char **argv, char **envp)
@@ -104,21 +100,7 @@ int main(int argc, char **argv, char **envp)
 	environ = set_environ(envp);
 	while (1)
 	{
-		printf("status: %d\n", WEXITSTATUS(status));
-		pid_t pid = fork();
-		if (pid < 0)
-		{
-			ft_putstr_fd("fork error\n", 2);
-			exit(1);
-		}
-		else if (pid == 0)
-		{
-			handle_child_process(environ, status);
-		}
-		else
-		{
-			status = handle_parent_process();
-		}
+		handle_child_process(environ, status);
 	}
 	return 0;
 }
