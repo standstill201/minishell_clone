@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 13:03:19 by seokjyoo          #+#    #+#             */
-/*   Updated: 2023/02/21 06:38:59 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/21 06:55:36 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@
 // 			wait(NULL);
 // 	}
 // }
-void handle_child_process(t_env *environ, int status)
+void handle_child_process(t_env *environ, int *status)
 {
 	char	*line;
 	t_cmd	*line_root;
@@ -68,7 +68,7 @@ void handle_child_process(t_env *environ, int status)
 	// 	exit(0);
 	if (line[0] != '\0')
 		add_history(line);
-	line_root = parse_data(line, &status);
+	line_root = parse_data(line, status);
 	if (!line_root)
 	{
 		free(line);
@@ -100,7 +100,7 @@ int main(int argc, char **argv, char **envp)
 	environ = set_environ(envp);
 	while (1)
 	{
-		handle_child_process(environ, status);
+		handle_child_process(environ, &status);
 	}
 	return 0;
 }
