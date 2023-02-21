@@ -58,7 +58,7 @@ int	execute_by_type(t_cmd *node, t_env *environ)
 	struct stat	sb;
 	pid_t		pid;
 
-	set_fd(node);
+	//set_fd(node);
 	if (execute_builtin(node, environ) == 1)
 	{
 		pid = fork();
@@ -119,6 +119,7 @@ void	enter_pipeline(t_cmd *node, t_env *environ)
 	}
 }
 
+// heredoc 외부 출력으로 하기.
 // execute 안에 파이프라인에서는 fork로 돌아가게...
 int	execute(t_cmd *commandline, t_env *environ)
 {
@@ -127,6 +128,7 @@ int	execute(t_cmd *commandline, t_env *environ)
 	int		status;
 
 	node = commandline;
+	pid = 0;
 	if (node->next != NULL)
 	{
 		pid = fork();
@@ -134,16 +136,24 @@ int	execute(t_cmd *commandline, t_env *environ)
 			return (global_execute_error("falied to fork"));
 		else if (pid == 0)
 		{
+			set_fd(node);
 			while (node->next != NULL)
 			{
 				enter_pipeline(node, environ);
 				node = node->next;
 			}
+			exit(execute_by_type(node, environ));
 		}
 		else
-			if (waitpid(pid, NULL, 0) == -1)
+			if (waitpid(pid, &status, 0) == -1)
 				return (global_execute_error("failed to fork"));
 	}
-	return (execute_by_type(node, environ));
+	if (pid != 0)
+		return (WEXITSTATUS(status));
+	else
+	{
+		set_fd(node);
+		return (execute_by_type(node, environ));
+	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: gychoi <gychoi@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 15:23:08 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/21 20:41:56 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/21 21:50:43 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ int	execute_command(t_cmd *node, t_env *environ)
 	char	**envp;
 	int		i;
 
+	// check subshell
 	if (ft_strchr(node->cmd, '/') && access(node->cmd, F_OK | X_OK) == -1)
 		execute_error(node->cmd);
 	command = ft_strjoin("/", node->cmd);
