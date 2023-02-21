@@ -6,15 +6,11 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 01:08:42 by gychoi            #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2023/02/21 09:44:39 by codespace        ###   ########.fr       */
-=======
-/*   Updated: 2023/02/21 20:49:39 by gychoi           ###   ########.fr       */
->>>>>>> 0154b382d87952f3e7cfd61ff6bfa890f3bace0c
+/*   Updated: 2023/02/21 12:18:20 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/*
+
 #include "../include/execute.h"
 
 // return value에 대한 고민
@@ -148,7 +144,6 @@ int	execute(t_cmd *commandline, t_env *environ)
 			if (waitpid(pid, NULL, 0) == -1)
 				return (global_execute_error("failed to fork"));
 	}
-	printf("fds: %d, %d, %d, %d\n", node->fd_in, node->fd_out, node->fd_old_in, node->fd_old_out);
 	return (execute_by_type(node, environ));
 }
-*/
+

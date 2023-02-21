@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 10:07:03 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/21 11:58:16 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/21 12:46:42 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,12 @@ char	*name_creator(void)
 	return (return_val);
 }
 
-void	free_everything(char *line, char *str, int fd, t_list *temp)
+void	free_everything(char *line, char *str, int fd)
 {
 	unlink(str);
 	free(line);
 	free(str);
 	close(fd);
-	ft_lstclear(&temp, free);
 }
 
 
@@ -65,18 +64,23 @@ int	read_heredoc_infile(char *limiter, t_list *temp, int *status)
 	str = name_creator();
 	fd = open(str, O_CREAT | O_RDWR, 0644);
 	line = get_next_line(STDIN_FILENO, 1);
+	if (is_ended)
+	{
+		free_everything(line, str, fd);
+		*status = 130;
+		return (-2);
+	}
 	while (line && ft_strncmp(line, limiter, ft_strlen(line)))
 	{
-		if (is_ended)
-		{
-			free_everything(line, str, fd, temp);
-			*status = 130;
-			printf("!!!!!!!!!!!!!!!!!!!!\n");
-			return (-2);
-		}
 		write(fd, line, ft_strlen(line));
 		free(line);
 		line = get_next_line(STDIN_FILENO, 1);
+		if (is_ended)
+		{
+			free_everything(line, str, fd);
+			*status = 130;
+			return (-2);
+		}
 	}
 	close(fd);
 	fd = open(str, O_RDONLY);

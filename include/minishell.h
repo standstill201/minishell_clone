@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 13:04:12 by seokjyoo          #+#    #+#             */
-/*   Updated: 2023/02/21 11:53:32 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/21 12:03:21 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <stdlib.h>
 # include <fcntl.h>
 # include <errno.h>
+# include <stdio.h>
 
 
 # include "../LIBFT/libft.h"
