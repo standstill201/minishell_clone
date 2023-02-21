@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 05:55:43 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/21 06:35:21 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/21 07:35:07 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ t_cmd	*parse_data(char *str, int *status)
 		return (error_seperate(parse_seperate));
 	}
 	parse_seperate = merge_string(&parse_seperate);
-	del_redi_read_here(&parse_seperate);
+	if (del_redi_read_here(&parse_seperate, status))
+		return (error_seperate(parse_seperate));
 	return_val = final_parse(&parse_seperate);
 	return (return_val);
 }

@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 07:38:45 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/21 06:30:35 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/21 07:20:39 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,20 +25,21 @@ char    *read_string_before_white_quote(char *str, t_list **root)
 }
 int handle_first_pipe(t_list **root, int *status)
 {
-    t_list  *tmp;
-    tmp = (*root)->next;
-    while (tmp && tmp->is_meta && tmp->content[0] != '|')
-    {
-        if (!tmp->is_meta)
-            return (0);
-        tmp = tmp->next;
-    }
-    if (tmp && tmp->is_meta && tmp->content[0] == '|')
-    {
-        ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
-        *status = 2;
-        return (1);
-    }
+	t_list	*tmp;
+
+	tmp = (*root)->next;
+	while (tmp && tmp->is_meta && tmp->content[0] != '|')
+	{
+		if (!tmp->is_meta)
+			return (0);
+		tmp = tmp->next;
+	}
+	if (tmp && tmp->is_meta && tmp->content[0] == '|')
+	{
+		ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
+		*status = 2;
+		return (1);
+	}
 	return (0);
 }
 t_list  *seperate_string(char *str, int *status)
