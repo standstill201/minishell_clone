@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 07:28:27 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/17 11:10:41 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/21 12:07:28 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ char	*read_string_before_quote(char *str, t_list **root)
 		index++;
 	}
 	if (str[index] == '\0')
-		unexpected_token_end();
+		unexpected_token_end(0);
 }
 
 char	*read_string_while_white(char *str, t_list **root)
@@ -63,7 +63,7 @@ char	*read_string_while_white(char *str, t_list **root)
 	return (str + index);
 }
 
-char	*read_string_before_pipe(char *str, t_list **root)
+char	*read_string_before_pipe(char *str, t_list **root, int *status)
 {
 	int		index;
 	char	*return_val;
@@ -72,8 +72,9 @@ char	*read_string_before_pipe(char *str, t_list **root)
 	str++;
 	if (*str == '|')
 	{
-		printf("temp: syntax error near unexpected token \'|\'\n");
-		exit(1);
+		ft_putstr_fd("minishell: syntax error near unexpected token `|\'\n", 2);
+		*status = 2;
+		return (0);
 	}
 	return_val = (char *)malloc(sizeof(char) * 2);
 	return_val[0] = '|';
@@ -82,26 +83,27 @@ char	*read_string_before_pipe(char *str, t_list **root)
 	return (str);
 }
 
-char	*parse_meta(char *str, t_list **root)
+char	*parse_meta(char *str, t_list **root, int *status)
 {
 	char	*return_val;
 	
 	if (*str == '\'' || *str == '\"')
 		return_val = read_string_before_quote(str, root);
 	else if (*str == '|')
-		return_val = read_string_before_pipe(str, root);
+		return_val = read_string_before_pipe(str, root, status);
 	else if (*str == '>' || *str == '<')
 		return_val = read_string_before_redirection(str, root);
 	else if (ft_iswhite(*str))
 		return_val = read_string_while_white(str, root);
 	else if (*str == '$')
-		return_val = read_string_before_dollar(str, root);
+		return_val = read_string_before_dollar(str, root, status);
 	else
 	{
-		ft_putstr_fd("temp: syntax error near unexpected token `", 2);
+		ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
 		ft_putchar_fd(*str, 2);
 		ft_putstr_fd("\'\n", 2);
-		exit(1);
+		*status = 2;
+		return (0);
 	}
 	return (return_val);
 }

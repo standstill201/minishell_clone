@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 07:31:30 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/17 11:08:53 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/21 05:45:33 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,18 +69,24 @@ char	*read_string_before_redirection(char *str, t_list **root)
 }
 
 
-char	*read_string_before_dollar(char *str, t_list **root)
+char	*read_string_before_dollar(char *str, t_list **root, int *status)
 {
 	int		index;
 	char	*return_val;
 	
 	index = 1;
+	if (str[index] == '?')
+	{
+		ft_lstadd_back(root, ft_lstnew(ft_strdup("?"), 0));
+		return (str + 2);
+	}
 	if (ft_isalpha(str[index]) || str[index] == '_')
 		index++;
 	else
 	{
-		printf("temp: syntax error near unexpected token \'$\'\n");
-		exit(1);
+		ft_putstr_fd("minishell: syntax error near unexpected token \'$\'\n", 2);
+		*status = 1;
+		return (0);
 	}
 	while (str[index] && (ft_isalnum(str[index]) || str[index] == '_'))
 		index++;

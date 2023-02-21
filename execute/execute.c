@@ -6,92 +6,25 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 01:08:42 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/20 00:11:55 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/21 12:18:20 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+
 #include "../include/execute.h"
-#include <stdio.h> // must delete!
 
-void	is_directory(t_cmd *node)
-{
-	struct stat	sb;
-
-	if (stat(node->cmd, &sb) == 0 && S_ISDIR(sb.st_mode))
-		minishell_error("is a directory"); // not error!
-}
-
-char	*find_path(char *command, char **envp)
-{
-	int		i;
-	char	*path;
-	char	*find;
-	char	**paths;
-
-	if (access(command, F_OK | X_OK) == 0)
-		return (command);
-	i = 0;
-	while (envp[i] && ft_strncmp(envp[i], "PATH=", 5))
-		i++;
-	if (envp[i] == NULL)
-		return (NULL);
-	paths = ft_split(envp[i] + 5, ':');
-	i = 0;
-	find = NULL;
-	while (paths[i])
-	{
-		path = ft_strjoin(paths[i], command);
-		if (access(path, F_OK | X_OK) == 0)
-			find = ft_strdup(path);
-		free(path);
-		free(paths[i++]);
-	}
-	free(paths);
-	return (find);
-}
-
-// 확장된 환경변수는 어떻게 처리하지...?
-int	execute_command(t_cmd *node, t_env *environ)
-{
-	char	*command;
-	char	*path;
-	char	**envp;
-
-	if (ft_strchr(node->cmd, '/'))
-		minishell_error(node->cmd);
-	command = ft_strjoin("/", node->cmd);
-	envp = get_environ(environ);
-	path = find_path(command, envp);
-	printf("command: [%s], path: [%s]\n", command, path);
-	if (path == NULL || ft_strlen(node->cmd) == 0)
-		return (0);
-	if (execve(path, node->args, envp) == -1)
-	{
-		printf("EXECVE FAILED\n");
-		free(command);
-		free(path);
-		// free(args);
-	}
-	return (0);
-}
-
-// env에 대한 정보가 필요하다.
 // return value에 대한 고민
 int	execute_builtin(t_cmd *node, t_env *environ)
 {
 	int	ret;
 
-	ret = 0;
+	ret = 1;
+	if (node->cmd == NULL)
+		return (ret);
 	if (ft_strncmp(node->cmd, "echo", 5) == 0)
-	{
-		ft_putstr_fd("PROD: ECHO EXECUTED\n", 1);
-		exit(1);
-	}
+		ret = ft_echo(node);
 	else if (ft_strncmp(node->cmd, "cd", 3) == 0)
-	{
-		ft_putstr_fd("PROD: CD EXECUTED\n", 1);
-		exit(1);
-	}
+		ret = ft_cd(node, environ);
 	else if (ft_strncmp(node->cmd, "pwd", 4) == 0)
 	{
 		ft_putstr_fd("PROD: PWD EXECUTED\n", 1);
@@ -120,72 +53,107 @@ int	execute_builtin(t_cmd *node, t_env *environ)
 	return (ret);
 }
 
+int	execute_by_type(t_cmd *node, t_env *environ)
+{
+	struct stat	sb;
+	pid_t		pid;
+
+	//set_fd(node);
+	if (execute_builtin(node, environ) == 1)
+	{
+		pid = fork();
+		if (pid == -1)
+		{
+			reset_fd(node);
+			return (global_execute_error("failed to fork\n")); // exit?
+		}
+		else if (pid == 0)
+		{
+			if (stat(node->cmd, &sb) == 0 && S_ISDIR(sb.st_mode))
+			{
+				reset_fd(node);
+				is_a_directory(node->cmd);
+			}
+			if (execute_command(node, environ) == 1)
+			{
+				reset_fd(node);
+				command_not_found(node->cmd);
+			}
+		}
+		else
+			if (waitpid(pid, NULL, 0) == -1)
+				return (global_execute_error("failed to waitpid\n")); // 오류에 대해 모두 초기화?
+	}
+	reset_fd(node);
+	return (1);
+}
+
 // need to add FUNCTION_GUARD
-static int	pipeline(t_cmd *node, t_env *environ)
+// 에러 시 연결리스트 해제 필요? 혹은.. 가장 마지막에?
+// 현재 25줄...
+void	enter_pipeline(t_cmd *node, t_env *environ)
 {
 	int		pfd[2];
-	int		status;
 	pid_t	pid;
 
-	pipe(pfd);
+	ft_pipe(pfd);
 	pid = fork();
 	if (pid == -1)
-		minishell_error("fork error");
+		global_execute_error("failed to fork");
 	else if (pid == 0)
 	{
-		close(pfd[READ_END]);
-		// 음... 애초에 0과 1로 세팅해준다면...?
+		ft_close(pfd[READ_END]);
 		if (node->fd_out == -2)
 			node->fd_out = STDOUT_FILENO;
-		dup2(pfd[WRITE_END], node->fd_out);
-		close(pfd[WRITE_END]);
-		// need to check error message
-		if (ft_strchr(node->cmd, '/'))
-			is_directory(node);
-		if (!execute_builtin(node, environ))
-			if (!execute_command(node, environ))
-				// error 시 연결리스트 해제 필요.
-				command_not_found(node->cmd);
+		ft_dup2(pfd[WRITE_END], node->fd_out);
+		exit(execute_by_type(node, environ));
 	}
 	else
 	{
-		waitpid(pid, &status, 0);
-		close(pfd[WRITE_END]);
+		if (waitpid(pid, NULL, 0) == -1)
+			global_execute_error("failed to waitpid");
+		ft_close(pfd[WRITE_END]);
 		if (node->fd_in == -2)
 			node->fd_in = STDIN_FILENO;
-		dup2(pfd[READ_END], node->fd_in);
-		close(pfd[READ_END]);
+		ft_dup2(pfd[READ_END], node->fd_in);
 	}
-	return (status);
 }
 
-int	execute(t_cmd *root, t_env *environ)
+// heredoc 외부 출력으로 하기.
+// execute 안에 파이프라인에서는 fork로 돌아가게...
+int	execute(t_cmd *commandline, t_env *environ)
 {
 	t_cmd	*node;
 	pid_t	pid;
 	int		status;
 
-	pid = fork();
-	if (pid == -1)
-		minishell_error("fork error");
-	else if (pid == 0)
+	node = commandline;
+	pid = 0;
+	if (node->next != NULL)
 	{
-		node = root;
-		while (node->next != NULL)
+		pid = fork();
+		if (pid == -1)
+			return (global_execute_error("falied to fork"));
+		else if (pid == 0)
 		{
-			// should get return value
-			pipeline(node, environ);
-			node = node->next;
+			set_fd(node);
+			while (node->next != NULL)
+			{
+				enter_pipeline(node, environ);
+				node = node->next;
+			}
+			exit(execute_by_type(node, environ));
 		}
-		// need to check error message
-		// 극혐 구조! 구조에 대한 고민을 하자.
-		if (ft_strchr(node->cmd, '/'))
-			is_directory(node);
-		if (!execute_builtin(node, environ))
-			if (!execute_command(node, environ))
-				command_not_found(node->cmd);
+		else
+			if (waitpid(pid, &status, 0) == -1)
+				return (global_execute_error("failed to fork"));
 	}
+	if (pid != 0)
+		return (WEXITSTATUS(status));
 	else
-		waitpid(pid, &status, 0);
-	return (WEXITSTATUS(status));
+	{
+		set_fd(node);
+		return (execute_by_type(node, environ));
+	}
 }
+

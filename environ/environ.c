@@ -3,14 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   environ.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gychoi <gychoi@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 20:05:27 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/20 00:11:53 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/20 17:57:21 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/environ.h"
+
+char	*get_env(t_env *environ, char *key)
+{
+	t_env	*cur;
+
+	cur = environ;
+	while (cur != NULL)
+	{
+		if (ft_strncmp(cur->key, key, ft_strlen(cur->key) + 1) == 0)
+			return (cur->val);
+		cur = cur->next;
+	}
+	return (NULL);
+}
 
 char	**get_environ(t_env *environ)
 {
@@ -47,7 +61,8 @@ void	delete_environ(t_env *environ, char *key)
 
 	while (environ->next != NULL)
 	{
-		if (ft_strncmp(environ->next->key, key, ft_strlen(key) + 1) == 0)
+		if (ft_strncmp(environ->next->key, key, \
+			ft_strlen(environ->next->key) + 1) == 0)
 		{
 			tmp = environ->next;
 			environ->next = tmp->next;
@@ -57,9 +72,18 @@ void	delete_environ(t_env *environ, char *key)
 		}
 		environ = environ->next;
 	}
+	if (environ->next == NULL)
+	{
+		if (ft_strncmp(environ->key, key, ft_strlen(environ->key) + 1) == 0)
+		{
+			free(environ->key);
+			free(environ->val);
+			free(environ);
+		}
+	}
 }
 
-void	add_environ(t_env *environ, char *key, char *val)
+void	add_environ(t_env *environ, char *key, char *val, int export)
 {
 	t_env	*new;
 
@@ -69,6 +93,7 @@ void	add_environ(t_env *environ, char *key, char *val)
 		// minishell error
 	new->key = key;
 	new->val = val;
+	new->export = export;
 	new->next = NULL;
 	env_lstadd_back(&environ, new);
 }
@@ -93,7 +118,6 @@ t_env	*set_environ(char **envp)
 	}
 	return (environ);
 }
-
 //
 //#include <stdio.h>
 //#include <stdlib.h>
@@ -109,13 +133,15 @@ t_env	*set_environ(char **envp)
 //	char	*key;
 //	char	*value;
 //	char	**env_list;
+//	char	*find_env;
 //	int		i;
 //
 //	environ = set_environ(envp);
 //	key = ft_strdup("test key");
 //	value = ft_strdup("test value");
-//	add_environ(environ, key, value);
+//	add_environ(environ, key, value, 1);
 //	delete_environ(environ, "PATH");
+//	delete_environ(environ, "LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOONG");
 //	env_list = get_environ(environ);
 //	i = 0;
 //	while (env_list[i] != NULL)
@@ -123,6 +149,10 @@ t_env	*set_environ(char **envp)
 //		printf("%s\n", env_list[i]);
 //		i++;
 //	}
+//	find_env = get_env(environ, "USER");
+//	printf("find: %s\n", find_env);
+//	find_env = get_env(environ, "LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOONG");
+//	printf("find: %s\n", find_env);
 //	env_lstclear(environ);
 //	i = 0;
 //	while (env_list[i] != NULL)

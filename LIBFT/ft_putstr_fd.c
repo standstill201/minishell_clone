@@ -6,7 +6,7 @@
 /*   By: seokjyoo <seokjyoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/11 17:01:07 by seokjyoo          #+#    #+#             */
-/*   Updated: 2022/07/17 21:57:55 by seokjyoo         ###   ########.fr       */
+/*   Updated: 2023/02/20 19:50:03 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	ft_putstr_fd(char *s, int fd)
 {
 	size_t	len;
 
-	if (fd < 0)
+	if (fd < 0 || s == NULL)
 		return ;
 	len = ft_strlen(s);
 	write(fd, s, len);

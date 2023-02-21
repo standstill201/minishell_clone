@@ -6,68 +6,72 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 13:03:19 by seokjyoo          #+#    #+#             */
-/*   Updated: 2023/02/20 00:05:48 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/21 12:31:00 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./include/minishell.h"
 
-// fix argc, argv
-int	main(int argc, char **argv, char **envp)
+int is_ended;
+
+void sigintHandler(int sig_num)
+{
+	is_ended = 1;
+	write(1, "\nminishell$ ", 12); // write a newline character to STDOUT
+}
+
+void handle_child_process(t_env *environ, int *status)
 {
 	char	*line;
 	t_cmd	*line_root;
-	t_env	*environ;
 
-	environ = set_environ(envp);
-	while (1)
+	line = readline("minishell$ ");
+	// if (!line)
+	// 	exit(0);
+	if (line[0] != '\0')
+		add_history(line);
+	line_root = parse_data(line, status);
+	if (!line_root)
 	{
-		line = readline("minishell$ ");
-		if (!line)
-			break;
-		if (line[0] != '\0')
-			add_history(line);
-		line_root = parse_data(line);
-		execute(line_root, environ);
-		t_cmd	*temp = line_root;
-		while (temp)
-		{
-			printf("--------------------------\n");
-			printf("cmd:%s$\n", temp->cmd);
-			for (int i = 0; temp->args[i]; i++)
-				printf("args%d:%s$\n", i, temp->args[i]);
-			printf("fd_in: %d\n", temp->fd_in);
-			printf("fd_out: %d\n", temp->fd_out);
-			printf("pipe_n: %d\n", temp->pipe_n);
-			printf("--------------------------\n");
-			temp = temp->next;
-		}
 		free(line);
+		return ;
 	}
+	// execute(line_root, environ);
+	t_cmd *temp = line_root;
+	char *line_temp;
+	int fd;
+	while (temp)
+	{
+		printf("--------------------------\n");
+		printf("cmd:%s$\n", temp->cmd);
+		for (int i = 0; temp->args[i]; i++)
+			printf("args%d:%s$\n", i, temp->args[i]);
+		printf("fd_in: %d\n", temp->fd_in);
+		printf("fd_out: %d\n", temp->fd_out);
+		printf("pipe_n: %d\n", temp->pipe_n);
+		// read fd_in and print
+		char buf[100];
+				int ret = read(temp->fd_in, buf, 100);	
+				buf[ret] = '\0';
+				printf("buf: %s\n", buf);
+		printf("--------------------------\n");
+		temp = temp->next;
+	}
+	free(line);
 }
 
-// int main(int ac, char *av[])
-// {
-// 	t_list	*return_val;
-// 	char	**return_val_char;
-// 	int		index;
+int main(int argc, char **argv, char **envp)
+{
+	t_env	*environ;
+	int		status;
 
-// 	index = 0;
-// 	return_val = seperate_string("< infile cat");
-// 	set_pipe_n(&return_val);
-// 	set_env(&return_val);
-// 	t_list	*temp = merge_string(&return_val);
-// 	while (temp)
-// 	{
-// 		printf("--------------------------\n");
-// 		printf("is_meta: %d\n", temp->is_meta);
-// 		printf("pipe_n: %d\n", temp->pipe_n);
-// 		printf("content: $%s$\n", temp->content);
-// 		printf("--------------------------\n");
-// 		temp = temp->next;
-// 	}
-// 	// ft_lstclear(&(temp->next), free);
-// 	// free(temp->content);
-// 	// free(temp);
-// 	return (0);
-// }
+	status = 0;
+	environ = set_environ(envp);
+	signal(SIGINT, sigintHandler);
+	while (1)
+	{
+		is_ended = 0;
+		handle_child_process(environ, &status);
+	}
+	return 0;
+}
