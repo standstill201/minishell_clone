@@ -1,17 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute.c                                          :+:      :+:    :+:   */
+/*   execute_old.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gychoi <gychoi@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/22 01:31:40 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/22 03:32:47 by gychoi           ###   ########.fr       */
+/*   Created: 2023/02/12 01:08:42 by gychoi            #+#    #+#             */
+/*   Updated: 2023/02/22 01:31:43 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/execute.h"
 
+// return value에 대한 고민
 int	execute_builtin(t_cmd *node, t_env *environ)
 {
 	int	ret;
@@ -51,36 +52,45 @@ int	execute_builtin(t_cmd *node, t_env *environ)
 	return (ret);
 }
 
-// 따로 만들어야 하나?
-int	execute_command_type(t_cmd *node, t_env *environ, int type)
+int	execute_by_type(t_cmd *node, t_env *environ)
 {
 	struct stat	sb;
 	pid_t		pid;
 
-	if (type)
-		set_fd(node);
+	//set_fd(node);
 	if (execute_builtin(node, environ) == 1)
 	{
 		pid = fork();
 		if (pid == -1)
-			exit (1); // with error... but return or exit?
+		{
+			reset_fd(node);
+			return (global_execute_error("failed to fork\n")); // exit?
+		}
 		else if (pid == 0)
 		{
 			if (stat(node->cmd, &sb) == 0 && S_ISDIR(sb.st_mode))
+			{
+				reset_fd(node);
 				is_a_directory(node->cmd);
+			}
 			if (execute_command(node, environ) == 1)
+			{
+				reset_fd(node);
 				command_not_found(node->cmd);
+			}
 		}
 		else
 			if (waitpid(pid, NULL, 0) == -1)
-				exit (1); // with error... but return or exit?
+				return (global_execute_error("failed to waitpid\n")); // 오류에 대해 모두 초기화?
 	}
-	if (type)
-		reset_fd(node);
-	return (0);
+	reset_fd(node);
+	return (1);
 }
 
-void	pipeline_child(t_cmd *node, t_env *environ)
+// need to add FUNCTION_GUARD
+// 에러 시 연결리스트 해제 필요? 혹은.. 가장 마지막에?
+// 현재 25줄...
+void	enter_pipeline(t_cmd *node, t_env *environ)
 {
 	int		pfd[2];
 	pid_t	pid;
@@ -88,68 +98,61 @@ void	pipeline_child(t_cmd *node, t_env *environ)
 	ft_pipe(pfd);
 	pid = fork();
 	if (pid == -1)
-		exit(1); // with error
+		global_execute_error("failed to fork");
 	else if (pid == 0)
 	{
 		ft_close(pfd[READ_END]);
-		ft_dup2(pfd[WRITE_END], STDOUT_FILENO);
-		if (execute_command_type(node, environ, 0) == 1)
-			command_not_found(node->cmd);
-		else
-			exit(0);
+		if (node->fd_out == -2)
+			node->fd_out = STDOUT_FILENO;
+		ft_dup2(pfd[WRITE_END], node->fd_out);
+		exit(execute_by_type(node, environ));
 	}
 	else
 	{
 		if (waitpid(pid, NULL, 0) == -1)
-			exit(1); // with error
+			global_execute_error("failed to waitpid");
 		ft_close(pfd[WRITE_END]);
-		ft_dup2(pfd[READ_END], STDIN_FILENO);
+		if (node->fd_in == -2)
+			node->fd_in = STDIN_FILENO;
+		ft_dup2(pfd[READ_END], node->fd_in);
 	}
 }
 
-void	pipeline(t_cmd *node, t_env *environ)
-{
-	t_cmd	*cur;
-
-	cur = node;
-	if (cur->fd_in == -2)
-		cur->fd_in = STDIN_FILENO;
-	if (cur->fd_out == -2)
-		cur->fd_out = STDOUT_FILENO;
-	dup2(cur->fd_in, STDIN_FILENO);
-	dup2(cur->fd_out, STDOUT_FILENO);
-	while (cur->next != NULL)
-	{
-		pipeline_child(cur, environ);
-		cur = cur->next;
-	}
-	if (execute_command_type(cur, environ, 0) == 1)
-		command_not_found(cur->cmd);
-	else
-		exit(0);
-}
-
-// subshell 처리하기.
-int	execute(t_cmd *line, t_env *environ)
+// heredoc 외부 출력으로 하기.
+// execute 안에 파이프라인에서는 fork로 돌아가게...
+int	execute(t_cmd *commandline, t_env *environ)
 {
 	t_cmd	*node;
 	pid_t	pid;
+	int		status;
 
-	if (line == NULL)
-		return (1);
-	node = line;
-	if (node->next == NULL)
-		return (execute_command_type(node, environ, 1));
-	else
+	node = commandline;
+	pid = 0;
+	if (node->next != NULL)
 	{
 		pid = fork();
 		if (pid == -1)
-			return (1); // with error
+			return (global_execute_error("falied to fork"));
 		else if (pid == 0)
-			pipeline(node, environ);
+		{
+			set_fd(node);
+			while (node->next != NULL)
+			{
+				enter_pipeline(node, environ);
+				node = node->next;
+			}
+			exit(execute_by_type(node, environ));
+		}
 		else
-			if (waitpid(pid, NULL, 0) == -1)
-				return (1); //with error
+			if (waitpid(pid, &status, 0) == -1)
+				return (global_execute_error("failed to fork"));
 	}
-	return (0);
+	if (pid != 0)
+		return (WEXITSTATUS(status));
+	else
+	{
+		set_fd(node);
+		return (execute_by_type(node, environ));
+	}
 }
+

@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 13:03:19 by seokjyoo          #+#    #+#             */
-/*   Updated: 2023/02/21 12:31:00 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/22 02:00:47 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void handle_child_process(t_env *environ, int *status)
 		free(line);
 		return ;
 	}
-	// execute(line_root, environ);
+	execute(line_root, environ);
 	t_cmd *temp = line_root;
 	char *line_temp;
 	int fd;
