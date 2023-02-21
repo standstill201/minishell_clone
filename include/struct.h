@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 04:24:16 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/20 17:50:00 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/21 19:59:07 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ typedef struct s_cmd
 	char			**args;
 	int				fd_out;
 	int				fd_in;
+	int				fd_old_in;
+	int				fd_old_out;
 	int				pipe_n;
 	struct s_cmd	*next;
 }	t_cmd;

@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 18:23:52 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/17 10:56:53 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/21 20:36:13 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ t_cmd	*ft_lstnew_cmd(char *cmd, char **args)
 	new->next = NULL;
 	new->fd_in = 0;
 	new->fd_out = 0;
+	new->fd_old_in = -2;
+	new->fd_old_out = -2;
 	new->pipe_n = 0;
 	return (new);
 }

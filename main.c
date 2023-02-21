@@ -6,7 +6,11 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 13:03:19 by seokjyoo          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2023/02/21 11:48:27 by codespace        ###   ########.fr       */
+=======
+/*   Updated: 2023/02/21 20:32:31 by gychoi           ###   ########.fr       */
+>>>>>>> 0154b382d87952f3e7cfd61ff6bfa890f3bace0c
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +40,10 @@ void handle_child_process(t_env *environ, int *status)
 		free(line);
 		return ;
 	}
+<<<<<<< HEAD
 	// execute(line_root, environ);
+=======
+>>>>>>> 0154b382d87952f3e7cfd61ff6bfa890f3bace0c
 	t_cmd *temp = line_root;
 	while (temp)
 	{
@@ -47,9 +54,12 @@ void handle_child_process(t_env *environ, int *status)
 		printf("fd_in: %d\n", temp->fd_in);
 		printf("fd_out: %d\n", temp->fd_out);
 		printf("pipe_n: %d\n", temp->pipe_n);
+		printf("fd_old_in: %d\n", temp->fd_old_in);
+		printf("fd_old_out: %d\n", temp->fd_old_out);
 		printf("--------------------------\n");
 		temp = temp->next;
 	}
+	execute(line_root, environ);
 	free(line);
 }
 
