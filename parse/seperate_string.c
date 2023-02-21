@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 07:38:45 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/21 06:30:35 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/21 07:20:39 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int	handle_first_pipe(t_list **root, int *status)
 		*status = 2;
 		return (1);
 	}
+	return (0);
 }
 
 

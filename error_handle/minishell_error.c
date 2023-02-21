@@ -6,19 +6,20 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 10:53:47 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/21 06:13:23 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/21 07:52:37 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	minishell_error(char *error_msg)
+int	minishell_error(char *error_msg, int *status)
 {
 	write(2, "minishell: ", 11);
 	write(2, error_msg, ft_strlen(error_msg));
 	write(2, ": ", 2);
 	perror("");
-	exit(1);
+	*status = 1;
+	return (1);
 }
 
 int	unexpected_token_error(char *token, int *status)
@@ -30,14 +31,16 @@ int	unexpected_token_error(char *token, int *status)
 	return (1);
 }
 
-void	unexpected_token_newline(void)
+int	unexpected_token_newline(int *status)
 {
 	ft_putstr_fd("minishell: syntax error near unexpected token `newline'\n", 2);
-	exit(1);
+	*status = 2;
+	return (1);
 }
 
-void	unexpected_token_end(void)
+int	unexpected_token_end(int *status)
 {
 	ft_putstr_fd("minishell: syntax error not ended quote\n", 2);
-	exit(1);
+	*status = 1;
+	return (1);
 }
