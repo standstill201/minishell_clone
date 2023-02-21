@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 08:40:31 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/20 12:29:52 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/21 06:32:03 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ t_list	*redi_append(t_list *temp)
 	while (temp && temp->is_meta && ft_iswhite(temp->content[0]))
 		temp = temp->next;
 	if (temp && temp->is_meta && !ft_iswhite(temp->content[0]))
-		unexpected_token_error(temp->content);
+		unexpected_token_error(temp->content, 0);
 	if (!temp)
 		unexpected_token_newline();
 	temp->fd = open(temp->content, O_WRONLY | O_APPEND | O_CREAT, 0644);
@@ -34,7 +34,7 @@ t_list	*redi_new(t_list *temp)
 	while (temp && temp->is_meta && ft_iswhite(temp->content[0]))
 		temp = temp->next;
 	if (temp && temp->is_meta && !ft_iswhite(temp->content[0]))
-		unexpected_token_error(temp->content);
+		unexpected_token_error(temp->content, 0);
 	if (!temp)
 		unexpected_token_newline();
 	temp->fd = open(temp->content, O_WRONLY | O_TRUNC | O_CREAT, 0644);
@@ -50,7 +50,7 @@ t_list	*redi_input(t_list *temp)
 	while (temp && temp->is_meta && ft_iswhite(temp->content[0]))
 		temp = temp->next;
 	if (temp && temp->is_meta && !ft_iswhite(temp->content[0]))
-		unexpected_token_error(temp->content);
+		unexpected_token_error(temp->content, 0);
 	if (!temp)
 		unexpected_token_newline();
 	temp->fd = open(temp->content, O_RDONLY);

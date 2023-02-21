@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 07:35:29 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/20 11:38:43 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/21 06:29:24 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ void	del_empty_envirnment(t_list **root, t_list *temp)
 	}
 }
 
-void	set_env(t_list **root, int status)
+void	set_env(t_list **root, int *status)
 {
 	t_list	*temp;
 	char	*return_val;
@@ -113,7 +113,7 @@ void	set_env(t_list **root, int status)
 		if (temp->is_meta == 0 && temp->content[0] == '?' && temp->is_single_quote == 0)
 		{
 			free(temp->content);
-			temp->content = ft_itoa(status);
+			temp->content = ft_itoa(*status);
 		}
 		else if (temp->is_meta == 0 && temp->content[0] == '$' && temp->is_single_quote == 0)
 		{
