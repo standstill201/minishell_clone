@@ -6,10 +6,11 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 01:08:42 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/20 21:51:32 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/21 09:44:39 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/*
 #include "../include/execute.h"
 #include <stdio.h> // must delete!
 
@@ -190,3 +191,4 @@ void	execute(t_cmd *root, t_env *environ)
 	// cd 부모 프로세스에 전달할 수 있는 방법 고민
 //	return (WEXITSTATUS(status));
 }
+*/

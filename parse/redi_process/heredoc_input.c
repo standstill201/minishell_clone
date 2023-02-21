@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 10:07:03 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/17 10:56:53 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/21 11:58:16 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,44 +46,17 @@ char	*name_creator(void)
 	return (return_val);
 }
 
-// int	create_temp_file(void)
-// {
-// 	char	*str;
-// 	int		fd;
+void	free_everything(char *line, char *str, int fd, t_list *temp)
+{
+	unlink(str);
+	free(line);
+	free(str);
+	close(fd);
+	ft_lstclear(&temp, free);
+}
 
-// 	str = name_creator();
-// 	fd = open(str, O_CREAT | O_RDWR, 0644);
-// 	unlink(str);
-// 	free(str);
-// 	return (fd);
-// }
 
-// int	read_heredoc_infile(char *limiter)
-// {
-// 	int		fd;
-// 	char	*line;
-// 	char	*lim;
-// 	int		temp_fd;
-
-// 	fd = create_temp_file();
-// 	lim = (char *)ft_calloc(ft_strlen(limiter) + 2, 1);
-// 	ft_memcpy(lim, limiter, ft_strlen(limiter));
-// 	lim[ft_strlen(limiter)] = '\n';
-// 	line = get_next_line(STDIN_FILENO, 1);
-// 	while (line && ft_strncmp(line, lim, ft_strlen(lim)))
-// 	{
-// 		write(fd, line, ft_strlen(line));
-// 		free(line);
-// 		line = get_next_line(STDIN_FILENO, 1);
-// 	}
-// 	free(lim);
-// 	free(line);
-// 	temp_fd = dup(fd);
-// 	close(fd);
-// 	return (temp_fd);
-// }
-
-int	read_heredoc_infile(char *limiter)
+int	read_heredoc_infile(char *limiter, t_list *temp, int *status)
 {
 	int		fd;
 	char	*line;
@@ -92,13 +65,18 @@ int	read_heredoc_infile(char *limiter)
 	str = name_creator();
 	fd = open(str, O_CREAT | O_RDWR, 0644);
 	line = get_next_line(STDIN_FILENO, 1);
-	line[ft_strlen(line) - 1] = '\0';
 	while (line && ft_strncmp(line, limiter, ft_strlen(line)))
 	{
+		if (is_ended)
+		{
+			free_everything(line, str, fd, temp);
+			*status = 130;
+			printf("!!!!!!!!!!!!!!!!!!!!\n");
+			return (-2);
+		}
 		write(fd, line, ft_strlen(line));
 		free(line);
 		line = get_next_line(STDIN_FILENO, 1);
-		line[ft_strlen(line) - 1] = '\0';
 	}
 	close(fd);
 	fd = open(str, O_RDONLY);

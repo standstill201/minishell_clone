@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 07:28:27 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/21 05:43:21 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/21 08:16:24 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ char	*read_string_before_quote(char *str, t_list **root)
 		index++;
 	}
 	if (str[index] == '\0')
-		unexpected_token_end();
+		unexpected_token_end(0);
 }
 
 char	*read_string_while_white(char *str, t_list **root)
