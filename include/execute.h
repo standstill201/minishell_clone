@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 19:19:23 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/20 11:43:34 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/20 20:55:42 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "minishell.h"
 # include "environ.h"
+# include "builtin.h"
 # include <sys/wait.h>
 # include <sys/stat.h>
 

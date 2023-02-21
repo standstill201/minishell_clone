@@ -6,7 +6,7 @@
 /*   By: gychoi <gychoi@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 22:07:16 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/19 23:39:19 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/20 19:21:21 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ t_env	*env_lstnew(char **envp)
 		//minishell_error("fail to create envp list");
 	new->key = envp[0];
 	new->val = envp[1];
+	new->export = 1;
 	new->next = NULL;
 	return (new);
 }

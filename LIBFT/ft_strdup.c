@@ -6,7 +6,7 @@
 /*   By: seokjyoo <seokjyoo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/09 13:29:50 by seokjyoo          #+#    #+#             */
-/*   Updated: 2022/07/09 23:32:08 by seokjyoo         ###   ########.fr       */
+/*   Updated: 2023/02/20 19:55:36 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ char	*ft_strdup(const char *src)
 	int		index;
 	char	*return_value;
 
+	if (src == NULL)
+		return (NULL);
 	index = 0;
 	len = ft_strlen(src);
 	return_value = (char *)malloc(sizeof(char) * (len + 1));
