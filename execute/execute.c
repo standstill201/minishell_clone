@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 01:08:42 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/21 15:52:38 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/21 17:11:38 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,11 @@ int	execute_builtin(t_cmd *node, t_env *environ)
 {
 	int	ret;
 
-	ret = 0;
+	ret = 1;
 	if (ft_strncmp(node->cmd, "echo", 5) == 0)
-	{
-		ft_putstr_fd("PROD: ECHO EXECUTED\n", 1);
-		exit(1);
-	}
+		ret = ft_echo(node);
 	else if (ft_strncmp(node->cmd, "cd", 3) == 0)
-		ft_cd(node, environ);
+		ret = ft_cd(node, environ);
 	else if (ft_strncmp(node->cmd, "pwd", 4) == 0)
 	{
 		ft_putstr_fd("PROD: PWD EXECUTED\n", 1);
@@ -53,21 +50,31 @@ int	execute_builtin(t_cmd *node, t_env *environ)
 	return (ret);
 }
 
-void	execute_by_type(t_cmd *node, t_env *environ)
+int	execute_by_type(t_cmd *node, t_env *environ)
 {
 	struct stat	sb;
-	int			ret;
+	pid_t		pid;
+	int			status;
 
-	ret = 0;
-	if (stat(node->cmd, &sb) == 0 && S_ISDIR(sb.st_mode))
-		is_a_directory(node->cmd);
-	//ret = execute_builtin(node, environ);
-	if (!ret)
+	status = execute_builtin(node, environ);
+	if (status == 1)
 	{
-		ret = execute_command(node, environ);
-		if (!ret)
-			command_not_found(node->cmd);
+		pid = fork();
+		if (pid == -1)
+			minishell_error("failed to fork");
+		else if (pid == 0)
+		{
+			if (stat(node->cmd, &sb) == 0 && S_ISDIR(sb.st_mode))
+				is_a_directory(node->cmd);
+			status = execute_command(node, environ);
+			if (status == 1)
+				command_not_found(node->cmd);
+		}
+		else
+			if (waitpid(pid, NULL, 0) == -1)
+				minishell_error("failed to waitpid");
 	}
+	return (status);
 }
 
 // need to add FUNCTION_GUARD
@@ -88,7 +95,7 @@ void	enter_pipeline(t_cmd *node, t_env *environ)
 		if (node->fd_out == -2)
 			node->fd_out = STDOUT_FILENO;
 		ft_dup2(pfd[WRITE_END], node->fd_out);
-		execute_by_type(node, environ);
+		exit(execute_by_type(node, environ));
 	}
 	else
 	{
@@ -101,28 +108,17 @@ void	enter_pipeline(t_cmd *node, t_env *environ)
 	}
 }
 
-#include <stdio.h>
-void	execute(t_cmd *commandline, t_env *environ)
+// execute 안에 파이프라인에서는 fork로 돌아가게...
+int	execute(t_cmd *commandline, t_env *environ)
 {
 	t_cmd	*node;
-	pid_t	pid;
 	int		status;
 
-	printf("enter to execute\n");
-	pid = fork();
-	if (pid == -1)
-		minishell_error("failed to fork");
-	else if (pid == 0)
+	node = commandline;
+	while (node->next != NULL)
 	{
-		node = commandline;
-		while (node->next != NULL)
-		{
-			enter_pipeline(node, environ);
-			node = node->next;
-		}
-		execute_by_type(node, environ);
+		enter_pipeline(node, environ);
+		node = node->next;
 	}
-	else
-		waitpid(pid, &status, 0);
-//	return (WEXITSTATUS(status));
+	return (execute_by_type(node, environ));
 }

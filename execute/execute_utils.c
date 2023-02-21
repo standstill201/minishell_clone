@@ -6,7 +6,7 @@
 /*   By: gychoi <gychoi@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 15:23:08 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/21 15:34:01 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/21 16:58:01 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	execute_command(t_cmd *node, t_env *environ)
 			free(envp[i++]);
 		free(envp);
 	}
-	return (0);
+	return (1);
 }
 
 void	ft_close(int fd)

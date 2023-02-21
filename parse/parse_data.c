@@ -30,9 +30,15 @@ t_cmd	*parse_data(char *str, int *status)
 	index = 0;
 	parse_seperate = seperate_string(str, status);
 	if (!parse_seperate)
+	{
+		printf("!!!!!!!!!!!!!!!!1\n");
 		return (error_seperate(parse_seperate));
+	}
 	if (set_here(&parse_seperate, status))
+	{
+		printf("!!!!!!!!!!!!!!!!2\n");
 		return (error_seperate(parse_seperate));
+	}
 	set_pipe_n(&parse_seperate);
 	set_env(&parse_seperate, status);
 	if (ft_lstlast(parse_seperate)->content[0] == '|' && ft_lstlast(parse_seperate)->is_meta == 1)

@@ -6,7 +6,7 @@
 #    By: codespace <codespace@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/25 13:03:12 by seokjyoo          #+#    #+#              #
-#    Updated: 2023/02/21 15:45:03 by gychoi           ###   ########.fr        #
+#    Updated: 2023/02/21 16:52:42 by gychoi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,6 +41,7 @@ SRC = ./main.c \
 	  ./execute/execute_utils.c \
 	  ./environ/environ.c \
 	  ./environ/environ_utils.c \
+	  ./builtin/ft_echo.c \
 	  ./builtin/ft_cd.c
 
 OBJ = $(SRC:.c=.o)
