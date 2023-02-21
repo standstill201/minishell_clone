@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 13:03:19 by seokjyoo          #+#    #+#             */
-/*   Updated: 2023/02/21 06:38:59 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/21 16:00:37 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,12 +69,13 @@ void handle_child_process(t_env *environ, int status)
 	if (line[0] != '\0')
 		add_history(line);
 	line_root = parse_data(line, &status);
+	printf("line: %s\n", line_root->cmd);
 	if (!line_root)
 	{
 		free(line);
 		return ;
 	}
-	execute(line_root, environ);
+	//execute(line_root, environ);
 	t_cmd *temp = line_root;
 	while (temp)
 	{
@@ -100,6 +101,7 @@ int main(int argc, char **argv, char **envp)
 	environ = set_environ(envp);
 	while (1)
 	{
+		printf("enter to loop\n");
 		handle_child_process(environ, status);
 	}
 	return 0;
