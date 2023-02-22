@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 13:03:19 by seokjyoo          #+#    #+#             */
-/*   Updated: 2023/02/22 02:00:47 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/22 10:40:22 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,14 @@ int is_ended;
 
 void sigintHandler(int sig_num)
 {
+	if (is_ended == -1)
+	{
+		write(1, "\n", 1);
+		close(0);
+	}
+	else
+		write(1, "\nminishell$ ", 12);
 	is_ended = 1;
-	write(1, "\nminishell$ ", 12); // write a newline character to STDOUT
 }
 
 void handle_child_process(t_env *environ, int *status)
@@ -26,8 +32,11 @@ void handle_child_process(t_env *environ, int *status)
 	t_cmd	*line_root;
 
 	line = readline("minishell$ ");
-	// if (!line)
-	// 	exit(0);
+	if (!line)
+	{
+		write(1, "\n", 1);
+		exit(0);
+	}
 	if (line[0] != '\0')
 		add_history(line);
 	line_root = parse_data(line, status);
@@ -36,25 +45,19 @@ void handle_child_process(t_env *environ, int *status)
 		free(line);
 		return ;
 	}
-	execute(line_root, environ);
+	*status = execute(line_root, environ);
 	t_cmd *temp = line_root;
 	char *line_temp;
 	int fd;
 	while (temp)
 	{
-		printf("--------------------------\n");
+		printf("\n--------------------------\n");
 		printf("cmd:%s$\n", temp->cmd);
 		for (int i = 0; temp->args[i]; i++)
 			printf("args%d:%s$\n", i, temp->args[i]);
 		printf("fd_in: %d\n", temp->fd_in);
 		printf("fd_out: %d\n", temp->fd_out);
 		printf("pipe_n: %d\n", temp->pipe_n);
-		// read fd_in and print
-		char buf[100];
-				int ret = read(temp->fd_in, buf, 100);	
-				buf[ret] = '\0';
-				printf("buf: %s\n", buf);
-		printf("--------------------------\n");
 		temp = temp->next;
 	}
 	free(line);
@@ -73,5 +76,5 @@ int main(int argc, char **argv, char **envp)
 		is_ended = 0;
 		handle_child_process(environ, &status);
 	}
-	return 0;
+	return (0);
 }

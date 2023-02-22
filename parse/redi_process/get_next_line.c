@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 10:32:43 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/21 12:35:14 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/22 09:34:15 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,12 +86,20 @@ char	*alloc_line(int fd, char *backup, char *line)
 	char	buffer[7];
 	ssize_t	read_size;
 	size_t	index;
+	int		tmp_fd;
 
 	index = 0;
 	buffer[6] = 0;
 	while (index++ < 6)
 		buffer[index] = 0;
+	tmp_fd = dup(0);
 	read_size = read(fd, buffer, 6);
+	if (is_ended > 0)
+	{
+		dup2(tmp_fd, 0);
+		close(tmp_fd);
+		return (0);
+	}
 	while (read_size > 0)
 	{
 		if (ft_strchr(buffer, (int) '\n'))
@@ -103,6 +111,12 @@ char	*alloc_line(int fd, char *backup, char *line)
 		else
 			line = re_allocate(buffer, line);
 		read_size = read(fd, buffer, 6);
+		if (is_ended > 0)
+		{
+			dup2(tmp_fd, 0);
+			close(tmp_fd);
+			return (0);
+		}
 		buffer[read_size] = 0;
 	}
 	if (!read_size)
@@ -115,6 +129,7 @@ char	*get_next_line(int fd, int trg)
 	char		*line;
 	static char	backup[7];
 
+	is_ended = -1;
 	if (fd < 0)
 		return (0);
 	line = 0;
@@ -136,5 +151,7 @@ char	*get_next_line(int fd, int trg)
 			return (line);
 		}
 	}
+	if (is_ended == -1)
+		is_ended = 0;
 	return (line);
 }
