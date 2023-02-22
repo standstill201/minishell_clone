@@ -6,7 +6,7 @@
 #    By: codespace <codespace@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/25 13:03:12 by seokjyoo          #+#    #+#              #
-#    Updated: 2023/02/21 20:14:32 by gychoi           ###   ########.fr        #
+#    Updated: 2023/02/22 19:39:39 by gychoi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,7 +43,12 @@ SRC = ./main.c \
 	  ./environ/environ.c \
 	  ./environ/environ_utils.c \
 	  ./builtin/ft_echo.c \
-	  ./builtin/ft_cd.c
+	  ./builtin/ft_cd.c \
+	  ./builtin/ft_pwd.c \
+	  ./builtin/ft_export.c \
+	  ./builtin/ft_unset.c \
+	  ./builtin/ft_env.c \
+	  ./builtin/ft_exit.c
 
 OBJ = $(SRC:.c=.o)
 

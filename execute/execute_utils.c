@@ -6,7 +6,7 @@
 /*   By: gychoi <gychoi@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 15:23:08 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/21 21:50:43 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/22 16:20:33 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,18 +41,20 @@ char	*find_path(char *command, char **envp)
 	return (find);
 }
 
-int	execute_command(t_cmd *node, t_env *environ)
+int	execute_command(t_cmd *node, char **envp)
 {
 	char	*command;
 	char	*path;
-	char	**envp;
 	int		i;
 
-	// check subshell
-	if (ft_strchr(node->cmd, '/') && access(node->cmd, F_OK | X_OK) == -1)
-		execute_error(node->cmd);
-	command = ft_strjoin("/", node->cmd);
-	envp = get_environ(environ);
+	if (ft_strchr(node->cmd, '/'))
+	{
+		if (access(node->cmd, F_OK | X_OK) == -1)
+			execute_command_error(node->cmd);
+		command = ft_strdup(node->cmd);
+	}
+	else
+		command = ft_strjoin("/", node->cmd);
 	path = find_path(command, envp);
 	if (path == NULL || ft_strlen(node->cmd) == 0)
 		return (1);
@@ -65,26 +67,25 @@ int	execute_command(t_cmd *node, t_env *environ)
 			free(envp[i++]);
 		free(envp);
 	}
-	printf("hello\n");
 	return (1);
 }
 
-void	ft_close(int fd)
+void	ft_close(int fd, int process_type)
 {
 	if (close(fd) == -1)
-		global_execute_error("failed to close\n");
+		execute_error("failed to close", process_type);
 }
 
-void	ft_dup2(int fd1, int fd2)
+void	ft_dup2(int fd1, int fd2, int process_type)
 {
 	if (dup2(fd1, fd2) == -1)
-		global_execute_error("falied to dup2\n");
+		execute_error("falied to dup2", process_type);
 	if (fd1 != -2)
-		ft_close(fd1);
+		ft_close(fd1, process_type);
 }
 
 void	ft_pipe(int *fd)
 {
 	if (pipe(fd) == -1)
-		global_execute_error("failed to pipe");
+		execute_error("failed to pipe", CHILD);
 }

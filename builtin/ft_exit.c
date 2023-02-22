@@ -6,11 +6,11 @@
 /*   By: gychoi <gychoi@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 17:25:50 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/14 19:06:41 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/22 19:46:44 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtin.h"
+#include "../include/builtin.h"
 
 int	is_numeric(char *arg)
 {
@@ -33,28 +33,24 @@ int	is_numeric(char *arg)
 	return (1);
 }
 
-void	ft_exit(char **argv)
+void	ft_exit(t_cmd *node)
 {
 	int	status;
 
-	if (argv[1] != NULL)
+	if (node->args[0] != NULL)
 	{
-		ft_putstr_fd("exit\n", 1);
-		if (argv[2] != NULL)
+		if (node->args[1] != NULL)
 		{
-			if (!is_numeric(argv[2]))
+			if (node->args[2] != NULL)
+			{
+				ft_putstr_fd("minishell: exit: too many arguments", 2);
+				exit(1);
+			}
+			if (!is_numeric(node->args[1]))
 				exit(255);
-			status = ft_atoi(argv[2]);
+			status = ft_atoi(node->args[1]);
 			exit(status);
 		}
 		exit(0);
 	}
-}
-
-int	main(int argc, char **argv)
-{
-	int	ret;
-
-	ft_exit(argv);
-	return (0);
 }

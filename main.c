@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 13:03:19 by seokjyoo          #+#    #+#             */
-/*   Updated: 2023/02/22 02:00:47 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/22 14:40:48 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,26 +37,26 @@ void handle_child_process(t_env *environ, int *status)
 		return ;
 	}
 	execute(line_root, environ);
-	t_cmd *temp = line_root;
-	char *line_temp;
-	int fd;
-	while (temp)
-	{
-		printf("--------------------------\n");
-		printf("cmd:%s$\n", temp->cmd);
-		for (int i = 0; temp->args[i]; i++)
-			printf("args%d:%s$\n", i, temp->args[i]);
-		printf("fd_in: %d\n", temp->fd_in);
-		printf("fd_out: %d\n", temp->fd_out);
-		printf("pipe_n: %d\n", temp->pipe_n);
-		// read fd_in and print
-		char buf[100];
-				int ret = read(temp->fd_in, buf, 100);	
-				buf[ret] = '\0';
-				printf("buf: %s\n", buf);
-		printf("--------------------------\n");
-		temp = temp->next;
-	}
+//	t_cmd *temp = line_root;
+//	char *line_temp;
+//	int fd;
+//	while (temp)
+//	{
+//		printf("--------------------------\n");
+//		printf("cmd:%s$\n", temp->cmd);
+//		for (int i = 0; temp->args[i]; i++)
+//			printf("args%d:%s$\n", i, temp->args[i]);
+//		printf("fd_in: %d\n", temp->fd_in);
+//		printf("fd_out: %d\n", temp->fd_out);
+//		printf("pipe_n: %d\n", temp->pipe_n);
+//		// read fd_in and print
+//		char buf[100];
+//				int ret = read(temp->fd_in, buf, 100);	
+//				buf[ret] = '\0';
+//				printf("buf: %s\n", buf);
+//		printf("--------------------------\n");
+//		temp = temp->next;
+//	}
 	free(line);
 }
 

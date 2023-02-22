@@ -6,17 +6,17 @@
 /*   By: gychoi <gychoi@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 13:25:17 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/14 16:07:18 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/22 16:44:44 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtin.h"
+#include "../include/builtin.h"
 
-int	ft_pwd(char **command)
+int	ft_pwd(t_cmd *node)
 {
 	char	*path;
 
-	if (command == NULL || command[1] == NULL)
+	if (node == NULL)
 		return (EXIT_FAILURE);
 	path = getcwd(NULL, 0);
 	if (path == NULL)
@@ -25,10 +25,4 @@ int	ft_pwd(char **command)
 	ft_putstr_fd("\n", 1);
 	free(path);
 	return (EXIT_SUCCESS);
-}
-
-int	main(int argc, char **argv)
-{
-	ft_pwd(argv);
-	return (0);
 }
