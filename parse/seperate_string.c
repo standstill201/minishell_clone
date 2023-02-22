@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 07:38:45 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/21 07:20:39 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/22 10:37:55 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,6 @@ t_list  *seperate_string(char *str, int *status)
             return (0);
     }
     if (handle_first_pipe(&root, status))
-	{
-		printf("!!!!!!!!!!!\n");
         return (0);
-	}
     return (root);
 }
