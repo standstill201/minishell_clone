@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 13:03:19 by seokjyoo          #+#    #+#             */
-/*   Updated: 2023/02/22 10:40:22 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/22 22:06:22 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ void handle_child_process(t_env *environ, int *status)
 		printf("fd_in: %d\n", temp->fd_in);
 		printf("fd_out: %d\n", temp->fd_out);
 		printf("pipe_n: %d\n", temp->pipe_n);
+		printf("\n--------------------------\n");
 		temp = temp->next;
 	}
 	free(line);
