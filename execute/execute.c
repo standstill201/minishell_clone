@@ -6,13 +6,11 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 01:31:40 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/23 10:04:50 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/23 19:44:42 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include	"../include/execute.h"
-
-pid_t temp[2];
 
 pid_t temp[2];
 
@@ -63,7 +61,7 @@ int	execute_command_type(t_cmd *node, t_env *environ, int process_type)
 			if (waitpid(pid, NULL, 0) == -1)
 				execute_error("failed to waitpid", process_type);
 	}
-	reset_fd(node, process_type);
+//	reset_fd(node, process_type);
 	return (0);
 }
 
@@ -71,19 +69,10 @@ void	pipeline_child(t_cmd *node, t_env *environ)
 {
 	int		pfd[2];
 	pid_t	pid;
-
-	// if (node->fd_in != -2)
-	// 	dup2(node->fd_in, STDIN_FILENO);
-	// else
-	// 	node->fd_in = dup(STDIN_FILENO);
-	// if (node->fd_out != -2)
-	// 	dup2(node->fd_out, STDOUT_FILENO);
-	// else
-	// 	node->fd_out = dup(STDOUT_FILENO);
 	
 	ft_pipe(pfd);
 	pid = fork();
-	temp[0] = pid;
+//	temp[0] = pid;
 	if (pid == -1)
 		execute_error("failed to fork", CHILD);
 	else if (pid == 0)
@@ -106,10 +95,10 @@ void	pipeline_child(t_cmd *node, t_env *environ)
 	}
 }
 
-void	pipeline(t_cmd *node, t_env *environ)
+int	pipeline(t_cmd *node, t_env *environ)
 {
 	t_cmd	*cur;
-	int		save;
+	pid_t	pid;
 
 	cur = node;
 	while (cur->next != NULL)
@@ -119,26 +108,28 @@ void	pipeline(t_cmd *node, t_env *environ)
 	}
 	// fork
 	// if child
-	if (cur->fd_in != -2)
-		ft_dup2(cur->fd_in, STDIN_FILENO, PARENT);
-	if (cur->fd_out != -2)
-		ft_dup2(cur->fd_out, STDOUT_FILENO, PARENT);
-	if (execute_command_type(cur, environ, PARENT) == 1)
-		command_not_found(cur->cmd);
-	else
-		exit(0);
-
+	pid = fork();
+	if (pid == 0)
+	{
+		if (cur->fd_in != -2)
+			ft_dup2(cur->fd_in, STDIN_FILENO, PARENT);
+		if (cur->fd_out != -2)
+			ft_dup2(cur->fd_out, STDOUT_FILENO, PARENT);
+		if (execute_command_type(cur, environ, PARENT) == 1)
+			command_not_found(cur->cmd);
+		else
+			exit(0);
+	}
 	// if parent
-	waitpid(temp[0], NULL, 0);	
+	waitpid(temp[0], NULL, 0);
+	return (0);
 }
-#include <stdio.h>
 int	execute(t_cmd *line, t_env *environ)
 {
 	t_cmd	*node;
 	pid_t	pid;
 	char	**envp;
 
-	printf("!!!!!!!!!!!!!!!!\n");
 	if (line == NULL)
 		return (1);
 	node = line;
@@ -147,9 +138,11 @@ int	execute(t_cmd *line, t_env *environ)
 		set_fd(node, PARENT);
 		return (execute_command_type(node, environ, PARENT));
 	}
-	else
+	pid = fork();
+	if (pid == 0)
 	{
 		pipeline(node, environ);
 	}
+	waitpid(pid, NULL, 0);
 	return (0);
 }
