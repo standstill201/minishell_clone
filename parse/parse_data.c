@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 05:55:43 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/22 10:56:06 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/23 05:45:45 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ t_cmd	*parse_data(char *str, int *status)
 		return (error_seperate(parse_seperate));
 	set_pipe_n(&parse_seperate);
 	set_env(&parse_seperate, status);
-	if (ft_lstlast(parse_seperate)->content[0] == '|' && ft_lstlast(parse_seperate)->is_meta == 1)
+	if (ft_lstlast(parse_seperate)->content[0] == '|'
+		&& ft_lstlast(parse_seperate)->is_meta == 1)
 	{
 		ft_putstr_fd("minishell: not ended token `|'\n", 2);
 		*status = 1;
@@ -44,20 +45,6 @@ t_cmd	*parse_data(char *str, int *status)
 	parse_seperate = merge_string(&parse_seperate);
 	if (del_redi_read_here(&parse_seperate, status))
 		return (error_seperate(parse_seperate));
-	// same_file(&parse_seperate);
-	// t_list	*temp;
-	// temp = parse_seperate;
-	// print every node of temp
-	// while (temp)
-	// {
-	// 	printf("---------------------\n");
-	// 	printf("content: %s\n", temp->content);
-	// 	printf("fd: %d\n", temp->fd);
-	// 	printf("is_fd_new: %d\n", temp->is_fd_new);
-	// 	printf("is_fd_add: %d\n", temp->is_fd_add);
-	// 	printf("is_fd_input: %d\n", temp->is_fd_input);
-	// 	temp = temp->next;
-	// }
 	return_val = final_parse(&parse_seperate);
 	return (return_val);
 }
