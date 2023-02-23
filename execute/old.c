@@ -138,3 +138,77 @@ int	execute(t_cmd *line, t_env *environ)
 	}
 	return (0);
 }
+
+// -------------------
+
+void	pipeline_child(t_cmd *node, t_env *environ)
+{
+	int		pfd[2];
+	pid_t	pidd;
+	
+	ft_pipe(pfd);
+	pidd = fork();
+	if (pidd == -1)
+		execute_error("failed to fork", CHILD);
+	else if (pidd == 0)
+	{
+		if (node->fd_in != -2)
+			ft_dup2(node->fd_in, STDIN_FILENO, CHILD);
+		ft_close(pfd[READ_END], CHILD);
+		ft_dup2(pfd[WRITE_END], STDOUT_FILENO, CHILD);
+		if (node->fd_out != -2)
+			ft_dup2(node->fd_out, STDOUT_FILENO, CHILD);
+		if (execute_command_type(node, environ, CHILD) == 1)
+			command_not_found(node->cmd);
+	}
+	close(pfd[WRITE_END]);
+	dup2(pfd[READ_END], STDIN_FILENO);
+}
+
+int	pipeline(t_cmd *node, t_env *environ)
+{
+	t_cmd	*cur;
+	pid_t	pid;
+
+	pid = fork();
+	if (pid == -1)
+		execute_error("failed to fork", CHILD);
+	if (pid == 0)
+	{
+		cur = node;
+		while (cur->next != NULL)
+		{
+			pipeline_child(cur, environ);
+			cur = cur->next;
+		}
+		exit(0);
+	}
+	ft_waitpid(pid, NULL, 0, CHILD);
+	return (999);
+}
+
+int	execute(t_cmd *line, t_env *environ)
+{
+	t_cmd	*node;
+	pid_t	pid;
+
+	node = line;
+	if (node->next == NULL)
+		ret = execute_command_type(node, environ, PARENT);
+	pid = fork();
+	if (pid == -1)
+		execute_error("failed to fork", PARENT);
+	else if (pid == 0)
+	{
+		while (node->next != NULL)
+		{
+			ret = pipeline(node, environ);
+			node = node->next;
+		}
+		// set simple command
+		if (execute_command_type(cur, environ, CHILD) == 1)
+			command_not_found(cur->cmd);
+	}
+	ft_waitpid(pid, NULL, 0, PARENT);
+	return (ret);
+}

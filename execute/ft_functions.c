@@ -6,7 +6,7 @@
 /*   By: gychoi <gychoi@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 17:43:32 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/23 22:01:26 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/24 03:49:17 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,10 @@
 int	ft_close(int fd, int process_type)
 {
 	if (close(fd) == -1)
+	{
+		perror("");
 		return (execute_error("failed to close", process_type));
+	}
 }
 
 int	ft_dup2(int fd1, int fd2, int process_type)

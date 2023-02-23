@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 01:31:40 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/23 22:08:04 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/24 04:21:09 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,13 +63,13 @@ int	execute_command_type(t_cmd *node, t_env *environ, int process_type)
 void	pipeline_child(t_cmd *node, t_env *environ)
 {
 	int		pfd[2];
-	pid_t	pidd;
-	
+	pid_t	pid;
+
 	ft_pipe(pfd);
-	pidd = fork();
-	if (pidd == -1)
+	pid = fork();
+	if (pid == -1)
 		execute_error("failed to fork", CHILD);
-	else if (pidd == 0)
+	else if (pid == 0)
 	{
 		if (node->fd_in != -2)
 			ft_dup2(node->fd_in, STDIN_FILENO, CHILD);
@@ -79,55 +79,52 @@ void	pipeline_child(t_cmd *node, t_env *environ)
 			ft_dup2(node->fd_out, STDOUT_FILENO, CHILD);
 		if (execute_command_type(node, environ, CHILD) == 1)
 			command_not_found(node->cmd);
+		exit(0);
 	}
-	close(pfd[WRITE_END]);
-	dup2(pfd[READ_END], STDIN_FILENO);
+	ft_close(pfd[WRITE_END], CHILD);
+	ft_dup2(pfd[READ_END], STDIN_FILENO, CHILD);
 }
 
-int	pipeline(t_cmd *node, t_env *environ)
+int	pipeline(t_cmd *line, t_env *environ)
 {
 	t_cmd	*cur;
 	pid_t	pid;
 
+	cur = line;
+	while (cur->next != NULL)
+	{
+		pipeline_child(cur, environ);
+		cur = cur->next;
+	}
 	pid = fork();
-	if (pid == -1)
-		execute_error("failed to fork", CHILD);
 	if (pid == 0)
 	{
-		cur = node;
-		while (cur->next != NULL)
-		{
-			pipeline_child(cur, environ);
-			cur = cur->next;
-		}
 		if (cur->fd_in != -2)
-			ft_dup2(cur->fd_in, STDIN_FILENO, CHILD);
+			ft_dup2(cur->fd_in, STDIN_FILENO, PARENT);
 		if (cur->fd_out != -2)
-			ft_dup2(cur->fd_out, STDOUT_FILENO, CHILD);
-		if (execute_command_type(cur, environ, CHILD) == 1)
+			ft_dup2(cur->fd_out, STDOUT_FILENO, PARENT);
+		if (execute_command_type(cur, environ, PARENT) == 1)
 			command_not_found(cur->cmd);
 		exit(0);
 	}
-	ft_waitpid(pid, NULL, 0, CHILD);
-	return (999);
+	waitpid(pid, NULL, 0);
+	return (0);
 }
 
 int	execute(t_cmd *line, t_env *environ)
 {
-	t_cmd	*node;
-	pid_t	pid;
-	int		status;
-	int		ret;
+	int	ret;
 
-	if (line == NULL)
-		return (1);
-	node = line;
-	if (node->next == NULL)
+	if (line->next == NULL)
 	{
-		set_fd(node, PARENT);
-		ret = execute_command_type(node, environ, PARENT);
-		reset_fd(node, PARENT);
+		set_simple_command_fd(line, PARENT);
+		ret = execute_command_type(line, environ, PARENT);
+		reset_simple_command_fd(line, PARENT);
+		return (ret);
 	}
-	ret = pipeline(node, environ);
+	int	pid = fork();
+	if (!pid)
+		ret = pipeline(line, environ);
+	wait(NULL);
 	return (ret);
 }
