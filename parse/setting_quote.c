@@ -6,45 +6,24 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 07:35:29 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/21 06:29:24 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/23 09:24:55 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-
-void	set_pipe_n(t_list **root)
-{
-	t_list	*temp;
-	int		pipe_n;
-
-	temp = *root;
-	pipe_n = 0;
-	while (temp)
-	{
-		temp->pipe_n = pipe_n;
-		if (temp->is_meta && temp->content[0] == '|')
-			pipe_n++;
-		temp = temp->next;
-	}
-}
 
 t_list	*string_merger(t_list *temp, t_list **return_val)
 {
 	char	*add_string;
 	char	*temp_string;
 	int		pipe_n;
-	int		here_word_trg_q;
 	int		here_word_trg;
 
 	add_string = "";
-	here_word_trg_q = 0;
 	here_word_trg = 0;
 	pipe_n = temp->pipe_n;
 	while (temp && temp->is_meta == 0)
 	{
-		if (temp->is_here_quote_word)
-			here_word_trg_q = 1;
 		if (temp->is_here_word)
 			here_word_trg = 1;
 		temp_string = ft_strdup(add_string);
@@ -54,8 +33,6 @@ t_list	*string_merger(t_list *temp, t_list **return_val)
 	}
 	ft_lstadd_back(return_val, ft_lstnew(add_string, 0));
 	ft_lstlast(*return_val)->pipe_n = pipe_n;
-	if (here_word_trg_q)
-		ft_lstlast(*return_val)->is_here_quote_word = 1;
 	if (here_word_trg)
 		ft_lstlast(*return_val)->is_here_word = 1;
 	return (temp);
@@ -102,7 +79,13 @@ void	del_empty_envirnment(t_list **root, t_list *temp)
 	}
 }
 
-void	set_env(t_list **root, int *status)
+void	question_mark_extention(t_list *temp, int *status)
+{
+	free(temp->content);
+	temp->content = ft_itoa(*status);
+}
+
+void	set_env(t_list **root, int *status, t_env *environ)
 {
 	t_list	*temp;
 	char	*return_val;
@@ -110,14 +93,13 @@ void	set_env(t_list **root, int *status)
 	temp = *root;
 	while (temp)
 	{
-		if (temp->is_meta == 0 && temp->content[0] == '?' && temp->is_single_quote == 0)
+		if (temp->is_meta == 0 && temp->content[0] == '?'
+			&& temp->is_single_quote == 0 && temp->is_question_dollor)
+			question_mark_extention(temp, status);
+		else if (temp->is_meta == 0
+			&& temp->content[0] == '$' && temp->is_single_quote == 0)
 		{
-			free(temp->content);
-			temp->content = ft_itoa(*status);
-		}
-		else if (temp->is_meta == 0 && temp->content[0] == '$' && temp->is_single_quote == 0)
-		{
-			return_val = getenv(temp->content + 1);
+			return_val = get_env(environ, temp->content + 1);
 			free(temp->content);
 			if (return_val == NULL)
 			{

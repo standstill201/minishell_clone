@@ -1,22 +1,13 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_iswhite.c                                       :+:      :+:    :+:   */
+/*   ft_export_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: gychoi <gychoi@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/08 11:13:30 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/23 08:26:49 by codespace        ###   ########.fr       */
+/*   Created: 2023/02/23 17:29:55 by gychoi            #+#    #+#             */
+/*   Updated: 2023/02/23 17:31:26 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-
-int	ft_iswhite(char c)
-{
-	if (c == '\n' || c == '\t' || c == '\f' || c == '\r'
-		|| c == '\v' || c == ' ')
-		return (1);
-	else
-		return (0);
-}
+#include "../include/builtin.h"

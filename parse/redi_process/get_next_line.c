@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 10:32:43 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/22 09:34:15 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/23 08:25:46 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,34 +89,20 @@ char	*alloc_line(int fd, char *backup, char *line)
 	int		tmp_fd;
 
 	index = 0;
-	buffer[6] = 0;
-	while (index++ < 6)
-		buffer[index] = 0;
+	ft_memset(buffer, 0, 7);
 	tmp_fd = dup(0);
 	read_size = read(fd, buffer, 6);
-	if (is_ended > 0)
-	{
-		dup2(tmp_fd, 0);
-		close(tmp_fd);
-		return (0);
-	}
+	if (g_is_ended > 0)
+		sigint_case(tmp_fd);
 	while (read_size > 0)
 	{
 		if (ft_strchr(buffer, (int) '\n'))
-		{
-			line = re_allocate(buffer, line);
-			backup_maker(buffer, &backup);
-			return (line);
-		}
+			return (line_backup_realloc(buffer, backup, line, fd));
 		else
 			line = re_allocate(buffer, line);
 		read_size = read(fd, buffer, 6);
-		if (is_ended > 0)
-		{
-			dup2(tmp_fd, 0);
-			close(tmp_fd);
-			return (0);
-		}
+		if (g_is_ended > 0)
+			sigint_case(tmp_fd);
 		buffer[read_size] = 0;
 	}
 	if (!read_size)
@@ -129,17 +115,14 @@ char	*get_next_line(int fd, int trg)
 	char		*line;
 	static char	backup[7];
 
-	is_ended = -1;
+	line = 0;
+	g_is_ended = -1;
 	if (fd < 0)
 		return (0);
-	line = 0;
 	if (trg)
 		write(1, "> ", 2);
 	if (!backup[0])
-	{
-		line = alloc_line(fd, backup, line);
-		return (line);
-	}
+		return (alloc_line(fd, backup, line));
 	else
 	{
 		if (ft_strchr(backup, (int) '\n'))
@@ -151,7 +134,7 @@ char	*get_next_line(int fd, int trg)
 			return (line);
 		}
 	}
-	if (is_ended == -1)
-		is_ended = 0;
+	if (g_is_ended == -1)
+		g_is_ended = 0;
 	return (line);
 }

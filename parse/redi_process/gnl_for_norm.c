@@ -1,40 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   same_file.c                                        :+:      :+:    :+:   */
+/*   gnl_for_norm.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/22 10:22:44 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/22 10:54:49 by codespace        ###   ########.fr       */
+/*   Created: 2023/02/23 08:00:12 by codespace         #+#    #+#             */
+/*   Updated: 2023/02/23 08:13:30 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
-void	change_fd(t_list **pre_temp)
+char	*line_backup_realloc(char *buffer, char *backup, char *line, int fd)
 {
-	t_list	*temp;
+	int	read_size;
 
-	temp = *pre_temp;
-	while (temp)
-	{
-		if (temp->pipe_n != (*pre_temp)->pipe_n && temp->is_fd_input)
-			temp->fd = (*pre_temp)->fd;
-		temp = temp->next;
-	}
-	
+	line = re_allocate(buffer, line);
+	backup_maker(buffer, &backup);
+	return (line);
 }
 
-void	*same_file(t_list **root)
+int	sigint_case(int tmp_fd)
 {
-	t_list	*temp;
-
-	temp = *root;
-	while (temp)
-	{
-		if (temp->is_fd_new || temp->is_fd_add)
-			change_fd(&temp);
-		temp = temp->next;
-	}
+	dup2(tmp_fd, 0);
+	close(tmp_fd);
+	return (0);
 }

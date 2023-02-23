@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 04:24:16 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/22 03:31:56 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/23 06:39:33 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@ typedef struct s_list
 	int				is_meta;
 	int				is_single_quote;
 	int				is_here_word;
-	int				is_here_quote_word;
 	int				is_fd_new;
 	int				is_fd_add;
 	int				is_fd_input;
+	int				is_question_dollor;
 	int				fd;
 	struct s_list	*next;
 }	t_list;
