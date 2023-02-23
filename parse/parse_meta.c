@@ -6,48 +6,47 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 07:28:27 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/23 05:44:35 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/23 07:22:25 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	is_meta(char c)
-{
-	if (c == '|' || c == '>' || c == '<' || ft_iswhite(c)
-		|| c == '\'' || c == '\"' || c == '$' || c == ';' || c == '\\')
-		return (1);
-	else
-		return (0);
-}
-
-char	*read_string_before_quote(char *str, t_list **root)
+char	*extract_string(char *str, char trg)
 {
 	int		index;
-	char	*return_val;
-	char	trg;
 
 	index = 0;
-	trg = *str;
-	str++;
 	while (str[index])
 	{
 		if (str[index] == trg)
-		{
-			return_val = ft_substr(str, 0, index);
-			if (str[index] == '\"')
-				double_quote_task(return_val, root);
-			else
-			{
-				ft_lstadd_back(root, ft_lstnew(return_val, 0));
-				ft_lstlast(*root)->is_single_quote = 1;
-			}
-			return (str + index + 1);
-		}
+			return (ft_substr(str, 0, index));
 		index++;
 	}
 	if (str[index] == '\0')
 		unexpected_token_end(0);
+	return (NULL);
+}
+
+char	*read_string_before_quote(char *str, t_list **root, int *status)
+{
+	char	*return_val;
+	char	trg;
+
+	trg = *str;
+	str++;
+	return_val = extract_string(str, trg);
+	if (trg == '\"')
+	{
+		if (double_quote_task(return_val, root, status))
+			return (NULL);
+	}
+	else
+	{
+		ft_lstadd_back(root, ft_lstnew(return_val, 0));
+		ft_lstlast(*root)->is_single_quote = 1;
+	}
+	return (str + ft_strlen(return_val) + 1);
 }
 
 char	*read_string_while_white(char *str, t_list **root)
@@ -88,7 +87,7 @@ char	*parse_meta(char *str, t_list **root, int *status)
 	char	*return_val;
 
 	if (*str == '\'' || *str == '\"')
-		return_val = read_string_before_quote(str, root);
+		return_val = read_string_before_quote(str, root, status);
 	else if (*str == '|')
 		return_val = read_string_before_pipe(str, root, status);
 	else if (*str == '>' || *str == '<')

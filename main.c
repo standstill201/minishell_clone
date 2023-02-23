@@ -6,43 +6,43 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 13:03:19 by seokjyoo          #+#    #+#             */
-/*   Updated: 2023/02/23 05:25:03 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/23 09:27:21 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./include/minishell.h"
 
-int is_ended;
+int	g_is_ended;
 
-void sigintHandler(int sig_num)
+void	sigint_handler(int sig_num)
 {
-	if (is_ended == -1)
+	if (g_is_ended == -1)
 	{
 		write(1, "\n", 1);
 		close(0);
 	}
 	else
 		write(1, "\nminishell$ ", 12);
-	is_ended = 1;
+	g_is_ended = 1;
 }
 
-void handle_child_process(t_env *environ, int *status)
+void	handle_child_process(t_env *environ, int *status)
 {
 	char	*line;
 	t_cmd	*line_root;
 	int		tmp_fd;
 
 	tmp_fd = dup(0);
-	is_ended = -1;
+	g_is_ended = -1;
 	line = readline("minishell$ ");
-	if (is_ended > 0)
+	if (g_is_ended > 0)
 	{
 		dup2(tmp_fd, 0);
 		close(tmp_fd);
 		return ;
 	}
-	if (is_ended == -1)
-		is_ended = 0;
+	if (g_is_ended == -1)
+		g_is_ended = 0;
 	if (!line)
 	{
 		write(1, "\n", 1);
@@ -50,13 +50,12 @@ void handle_child_process(t_env *environ, int *status)
 	}
 	if (line[0] != '\0')
 		add_history(line);
-	line_root = parse_data(line, status);
+	line_root = parse_data(line, status, environ);
 	if (!line_root)
 	{
 		free(line);
 		return ;
 	}
-	*status = execute(line_root, environ);
 	t_cmd *temp = line_root;
 	char *line_temp;
 	int fd;
@@ -72,20 +71,22 @@ void handle_child_process(t_env *environ, int *status)
 		printf("\n--------------------------\n");
 		temp = temp->next;
 	}
+	*status = execute(line_root, environ);
 	free(line);
 }
 
-int main(int argc, char **argv, char **envp)
+
+int	main(int argc, char **argv, char **envp)
 {
 	t_env	*environ;
 	int		status;
 
 	status = 0;
 	environ = set_environ(envp);
-	signal(SIGINT, sigintHandler);
+	signal(SIGINT, sigint_handler);
 	while (1)
 	{
-		is_ended = 0;
+		g_is_ended = 0;
 		handle_child_process(environ, &status);
 	}
 	return (0);

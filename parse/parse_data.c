@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 05:55:43 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/23 05:45:45 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/23 09:29:29 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_cmd	*error_seperate(t_list *parse_seperate)
 	return (return_val);
 }
 
-t_cmd	*parse_data(char *str, int *status)
+t_cmd	*parse_data(char *str, int *status, t_env *environ)
 {
 	t_list	*parse_seperate;
 	t_cmd	*return_val;
@@ -34,7 +34,7 @@ t_cmd	*parse_data(char *str, int *status)
 	if (set_here(&parse_seperate, status))
 		return (error_seperate(parse_seperate));
 	set_pipe_n(&parse_seperate);
-	set_env(&parse_seperate, status);
+	set_env(&parse_seperate, status, environ);
 	if (ft_lstlast(parse_seperate)->content[0] == '|'
 		&& ft_lstlast(parse_seperate)->is_meta == 1)
 	{

@@ -6,31 +6,11 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 11:28:00 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/22 10:36:56 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/23 08:25:46 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-int	pipe_size_check(t_list *pre_temp, t_list *temp)
-{
-	int	index;
-
-	index = 0;
-	while (pre_temp != temp)
-	{
-		if (pre_temp && pre_temp->is_meta == 0 && pre_temp->is_here_word == 0
-			&& pre_temp->is_fd_input == 0 && pre_temp->is_fd_new == 0
-			&& pre_temp->is_fd_add == 0)
-			index++;
-		pre_temp = pre_temp->next;
-		if (pre_temp && pre_temp->is_meta == 0 && pre_temp->is_here_word == 0
-			&& pre_temp->is_fd_input == 0 && pre_temp->is_fd_new == 0
-			&& pre_temp->is_fd_add == 0 && pre_temp == temp)
-			index++;
-	}
-	return (index);
-}
 
 t_list	*cmd_parser(t_list *pre_temp, char **cmd)
 {
@@ -137,7 +117,7 @@ t_cmd	*final_parse(t_list **pre_lst)
 		temp = temp->next;
 	}
 	ft_lstclear(pre_lst, free);
-	if (is_ended)
+	if (g_is_ended)
 		return (0);
 	return (return_val);
 }
