@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 07:35:29 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/23 07:30:33 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/23 09:24:55 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void	question_mark_extention(t_list *temp, int *status)
 	temp->content = ft_itoa(*status);
 }
 
-void	set_env(t_list **root, int *status)
+void	set_env(t_list **root, int *status, t_env *environ)
 {
 	t_list	*temp;
 	char	*return_val;
@@ -99,7 +99,7 @@ void	set_env(t_list **root, int *status)
 		else if (temp->is_meta == 0
 			&& temp->content[0] == '$' && temp->is_single_quote == 0)
 		{
-			return_val = getenv(temp->content + 1);
+			return_val = get_env(environ, temp->content + 1);
 			free(temp->content);
 			if (return_val == NULL)
 			{

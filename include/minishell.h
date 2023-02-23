@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 13:04:12 by seokjyoo          #+#    #+#             */
-/*   Updated: 2023/02/23 08:25:46 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/23 09:23:02 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,10 @@
 extern int	g_is_ended;
 
 // parse_part
-t_cmd	*parse_data(char *str, int *status);
+t_cmd	*parse_data(char *str, int *status, t_env *environ);
 t_list	*seperate_string(char *str, int *status);
 void	set_pipe_n(t_list **root);
-void	set_env(t_list **root, int *status);
+void	set_env(t_list **root, int *status, t_env *environ);
 void	*same_file(t_list **root);
 // heredoc_part
 int		set_here(t_list **pre_parse, int *status);

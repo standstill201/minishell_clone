@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 10:07:03 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/23 08:25:46 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/23 09:49:46 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ int	read_heredoc_infile(char *limiter, t_list *temp, int *status)
 
 	str = name_creator();
 	fd = open(str, O_CREAT | O_RDWR, 0644);
+	line = get_next_line(STDIN_FILENO, 1);
 	if (g_is_ended_case(status, str, fd))
 		return (-2);
 	while (line && ft_strncmp(line, limiter, ft_strlen(line)))

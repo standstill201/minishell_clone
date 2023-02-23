@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 07:31:30 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/23 07:21:04 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/23 09:33:27 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	process_dollar(char *return_val, int *index, t_list **root, int *status)
 		ft_lstlast(*root)->is_single_quote = 1;
 		(*index) += 2;
 	}
-	return (1);
+	return (0);
 }
 
 void	process_plain_text(char *return_val, int *index, t_list **root)
