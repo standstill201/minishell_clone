@@ -6,7 +6,7 @@
 /*   By: gychoi <gychoi@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:13:04 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/22 20:24:32 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/23 17:29:23 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 
 # define EXIT_SUCCESS 0
 # define EXIT_FAILURE 1
+
+int	is_meta_builtin(char c);
 
 int	ft_echo(t_cmd *node);
 int	ft_cd(t_cmd *node, t_env *environ);

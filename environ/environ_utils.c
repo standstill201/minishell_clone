@@ -6,7 +6,7 @@
 /*   By: gychoi <gychoi@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 22:07:16 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/20 19:21:21 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/23 17:28:02 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,7 @@ t_env	*env_lstnew(char **envp)
 
 	new = (t_env *)malloc(sizeof(t_env));
 	if (new == NULL)
-		exit(1);
-		//minishell_error("fail to create envp list");
+		return (NULL);
 	new->key = envp[0];
 	new->val = envp[1];
 	new->export = 1;
