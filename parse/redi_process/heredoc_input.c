@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 10:07:03 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/22 09:06:09 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/23 08:25:46 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,18 @@ void	free_everything(char *str, int fd)
 	close(fd);
 }
 
+int	g_is_ended_case(int *status, char *str, int fd)
+{
+	if (g_is_ended == -1)
+		g_is_ended = 0;
+	if (g_is_ended)
+	{
+		free_everything(str, fd);
+		*status = 130;
+		return (1);
+	}
+	return (0);
+}
 
 int	read_heredoc_infile(char *limiter, t_list *temp, int *status)
 {
@@ -62,28 +74,15 @@ int	read_heredoc_infile(char *limiter, t_list *temp, int *status)
 
 	str = name_creator();
 	fd = open(str, O_CREAT | O_RDWR, 0644);
-	line = get_next_line(STDIN_FILENO, 1);
-	if (is_ended == -1)
-		is_ended = 0;
-	if (is_ended)
-	{
-		free_everything(str, fd);
-		*status = 130;
+	if (g_is_ended_case(status, str, fd))
 		return (-2);
-	}
 	while (line && ft_strncmp(line, limiter, ft_strlen(line)))
 	{
 		write(fd, line, ft_strlen(line));
 		free(line);
 		line = get_next_line(STDIN_FILENO, 1);
-		if (is_ended == -1)
-			is_ended = 0;
-		if (is_ended)
-		{
-			free_everything(str, fd);
-			*status = 130;
+		if (g_is_ended_case(status, str, fd))
 			return (-2);
-		}
 	}
 	close(fd);
 	fd = open(str, O_RDONLY);
@@ -92,7 +91,3 @@ int	read_heredoc_infile(char *limiter, t_list *temp, int *status)
 	free(line);
 	return (fd);
 }
-
-
-
-// need to think about ctrl -c and ctrl -d

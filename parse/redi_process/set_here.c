@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 08:10:08 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/21 12:14:50 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/23 06:44:01 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,9 @@
 void	handle_here_word(t_list *temp)
 {
 	char	*limiter;
-	
+
 	while (temp && temp->is_meta == 0)
 	{
-		if (temp->content[0] == '\0')
-			temp->is_here_quote_word = 1;
 		temp->is_single_quote = 1;
 		temp->is_here_word = 1;
 		limiter = ft_strjoin(temp->content, "\n");
@@ -50,4 +48,3 @@ int	set_here(t_list **parse_separate, int *status)
 	}
 	return (0);
 }
-

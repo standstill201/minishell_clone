@@ -24,7 +24,7 @@ t_list	*ft_lstnew(char *content, int is_meta)
 	new_node -> is_meta = is_meta;
 	new_node -> pipe_n = 0;
 	new_node -> is_single_quote = 0;
-	new_node -> is_here_quote_word = 0;
+	new_node -> is_question_dollor = 0;
 	new_node -> is_here_word = 0;
 	new_node -> is_fd_new = 0;
 	new_node -> is_fd_add = 0;
