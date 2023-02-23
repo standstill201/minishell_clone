@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 19:19:23 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/23 17:21:10 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/23 17:26:40 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,5 @@ int		execute(t_cmd *commandline, t_env *environ);
 
 void	set_fd(t_cmd *node, int process_type);
 void	reset_fd(t_cmd *node, int process_type);
-void	set_pipeline_fd(t_cmd *node);
-
-
-void	reset_pipeline_fd(t_cmd *node);
 
 #endif
