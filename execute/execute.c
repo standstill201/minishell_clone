@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 01:31:40 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/23 17:25:08 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/23 17:56:27 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,10 @@ int	execute_command_type(t_cmd *node, t_env *environ, int process_type)
 	return (0);
 }
 
-int	pipeline_child(t_cmd *node, t_env *environ)
+void	pipeline_child(t_cmd *node, t_env *environ)
 {
 	int		pfd[2];
 	pid_t	pid;
-	int		status;
 
 	ft_pipe(pfd);
 	pid = fork();
@@ -75,55 +74,37 @@ int	pipeline_child(t_cmd *node, t_env *environ)
 	else if (pid == 0)
 	{
 		ft_close(pfd[READ_END], CHILD);
-		ft_dup2(pfd[WRITE_END], node->fd_out, CHILD);
+		ft_dup2(pfd[WRITE_END], STDOUT_FILENO, CHILD);
 		if (execute_command_type(node, environ, CHILD) == 1)
 			command_not_found(node->cmd);
 		else
 			exit(0);
 	}
-	if (waitpid(pid, &status, WNOHANG) == -1)
-		execute_error("failed to waitpid", CHILD);
-	ft_close(pfd[WRITE_END], CHILD);
-	ft_dup2(pfd[READ_END], node->fd_in, CHILD);
-	return (WEXITSTATUS(status));
-}
-
-int	redirection(t_cmd *node, t_env *environ)
-{
-	if (node->fd_in == -2)
-		node->fd_in = dup(STDIN_FILENO);
-	if (node->fd_out == -2)
-		node->fd_out = dup(STDOUT_FILENO);
-	node->fd_old_in = dup(STDIN_FILENO);
-	node->fd_old_out = dup(STDOUT_FILENO);
-	ft_dup2(node->fd_in, STDIN_FILENO, CHILD);
-	ft_dup2(node->fd_out, STDOUT_FILENO, CHILD);
-	if (execute_command_type(node, environ, CHILD) == 1)
-		command_not_found(node->cmd);
-	ft_dup2(node->fd_old_in, STDOUT_FILENO, CHILD);
-	ft_dup2(node->fd_old_out, STDOUT_FILENO, CHILD);
-	return (0); //temp
+	else
+	{
+		if (waitpid(pid, NULL, 0) == -1)
+			execute_error("failed to waitpid", CHILD);
+		ft_close(pfd[WRITE_END], CHILD);
+		ft_dup2(pfd[READ_END], STDIN_FILENO, CHILD);
+	}
 }
 
 int	pipeline(t_cmd *list, t_env *environ)
 {
 	t_cmd	*cur;
+	int		save;
 
 	cur = list;
 	while (cur->next != NULL)
 	{
-		if (cur->fd_in != -2 || cur->fd_out != -2)
-			redirection(cur, environ);
-		else
-			pipeline_child(cur, environ);
+		pipeline_child(cur, environ);
 		cur = cur->next;
 	}
-	if (cur->fd_in != -2 || cur->fd_out != -2)
-		redirection(cur, environ);
+	if (execute_command_type(cur, environ, CHILD) == 1)
+		command_not_found(cur->cmd);
 	else
-		if (execute_command_type(cur, environ, CHILD) == 1)
-			command_not_found(cur->cmd);
-	exit(1); // temp
+		exit(0);
+	return (0);
 }
 
 int	execute(t_cmd *line, t_env *environ)

@@ -6,7 +6,7 @@
 /*   By: gychoi <gychoi@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 15:23:08 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/22 16:20:33 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/23 17:43:51 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,24 +68,4 @@ int	execute_command(t_cmd *node, char **envp)
 		free(envp);
 	}
 	return (1);
-}
-
-void	ft_close(int fd, int process_type)
-{
-	if (close(fd) == -1)
-		execute_error("failed to close", process_type);
-}
-
-void	ft_dup2(int fd1, int fd2, int process_type)
-{
-	if (dup2(fd1, fd2) == -1)
-		execute_error("falied to dup2", process_type);
-	if (fd1 != -2)
-		ft_close(fd1, process_type);
-}
-
-void	ft_pipe(int *fd)
-{
-	if (pipe(fd) == -1)
-		execute_error("failed to pipe", CHILD);
 }
