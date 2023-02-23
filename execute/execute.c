@@ -6,7 +6,7 @@
 /*   By: gychoi <gychoi@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 01:31:40 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/23 15:16:01 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/23 17:25:08 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int	pipeline_child(t_cmd *node, t_env *environ)
 	else if (pid == 0)
 	{
 		ft_close(pfd[READ_END], CHILD);
-		ft_dup2(pfd[WRITE_END], STDOUT_FILENO, CHILD);
+		ft_dup2(pfd[WRITE_END], node->fd_out, CHILD);
 		if (execute_command_type(node, environ, CHILD) == 1)
 			command_not_found(node->cmd);
 		else
@@ -84,18 +84,24 @@ int	pipeline_child(t_cmd *node, t_env *environ)
 	if (waitpid(pid, &status, WNOHANG) == -1)
 		execute_error("failed to waitpid", CHILD);
 	ft_close(pfd[WRITE_END], CHILD);
-	ft_dup2(pfd[READ_END], STDIN_FILENO, CHILD);
+	ft_dup2(pfd[READ_END], node->fd_in, CHILD);
 	return (WEXITSTATUS(status));
 }
 
 int	redirection(t_cmd *node, t_env *environ)
 {
+	if (node->fd_in == -2)
+		node->fd_in = dup(STDIN_FILENO);
+	if (node->fd_out == -2)
+		node->fd_out = dup(STDOUT_FILENO);
+	node->fd_old_in = dup(STDIN_FILENO);
 	node->fd_old_out = dup(STDOUT_FILENO);
-	dup2(node->fd_out, STDOUT_FILENO);
+	ft_dup2(node->fd_in, STDIN_FILENO, CHILD);
+	ft_dup2(node->fd_out, STDOUT_FILENO, CHILD);
 	if (execute_command_type(node, environ, CHILD) == 1)
 		command_not_found(node->cmd);
-	if (node->fd_old_out != -2)
-		dup2(node->fd_old_out, STDOUT_FILENO);
+	ft_dup2(node->fd_old_in, STDOUT_FILENO, CHILD);
+	ft_dup2(node->fd_old_out, STDOUT_FILENO, CHILD);
 	return (0); //temp
 }
 
@@ -106,19 +112,18 @@ int	pipeline(t_cmd *list, t_env *environ)
 	cur = list;
 	while (cur->next != NULL)
 	{
-		if (cur->fd_in != -2)
-			dup2(cur->fd_in, STDIN_FILENO);
-		if (cur->fd_out != -2)
+		if (cur->fd_in != -2 || cur->fd_out != -2)
 			redirection(cur, environ);
 		else
 			pipeline_child(cur, environ);
 		cur = cur->next;
 	}
-	if (cur->fd_in != -2)
-		dup2(cur->fd_in, STDIN_FILENO);
-	if (execute_command_type(cur, environ, CHILD) == 1)
-		command_not_found(cur->cmd);
-	exit(0);
+	if (cur->fd_in != -2 || cur->fd_out != -2)
+		redirection(cur, environ);
+	else
+		if (execute_command_type(cur, environ, CHILD) == 1)
+			command_not_found(cur->cmd);
+	exit(1); // temp
 }
 
 int	execute(t_cmd *line, t_env *environ)
@@ -132,7 +137,7 @@ int	execute(t_cmd *line, t_env *environ)
 	node = line;
 	if (node->next == NULL)
 	{
-		set_fd(node);
+		set_fd(node, PARENT);
 		ret = execute_command_type(node, environ, PARENT);
 		reset_fd(node, PARENT);
 	}
