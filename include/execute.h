@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 19:19:23 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/23 17:47:50 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/23 20:32:13 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,6 @@ void	reset_fd(t_cmd *node, int process_type);
 int		ft_close(int fd, int process_type);
 int		ft_dup2(int fd1, int fd2, int process_type);
 int		ft_pipe(int *fd);
-int		ft_waitpid(pid_t pid, int *statloc, int options);
+int		ft_waitpid(pid_t pid, int *statloc, int options, int process_type);
 
 #endif
