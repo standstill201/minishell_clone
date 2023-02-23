@@ -6,13 +6,17 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 01:31:40 by gychoi            #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2023/02/22 11:18:41 by codespace        ###   ########.fr       */
+=======
+/*   Updated: 2023/02/22 22:31:21 by gychoi           ###   ########.fr       */
+>>>>>>> 2fa662aaee9f237c0ef2eefe04911853e47d1a49
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/execute.h"
 
-int	execute_builtin(t_cmd *node, t_env *environ)
+int	execute_builtin(t_cmd *node, t_env *environ, int process_type)
 {
 	int	ret;
 
@@ -32,7 +36,7 @@ int	execute_builtin(t_cmd *node, t_env *environ)
 	else if (ft_strncmp(node->cmd, "env", 4) == 0)
 		ret = ft_env(node, environ);
 	else if (ft_strncmp(node->cmd, "exit", 5) == 0)
-		ft_exit(node);
+		ret = ft_exit(node, process_type);
 	return (ret);
 }
 
@@ -41,7 +45,7 @@ int	execute_command_type(t_cmd *node, t_env *environ, int process_type)
 	struct stat	sb;
 	pid_t		pid;
 
-	if (execute_builtin(node, environ) == -1)
+	if (execute_builtin(node, environ, process_type) == -1)
 	{
 		pid = fork();
 		if (pid == -1)
@@ -93,15 +97,15 @@ void	pipeline_child(t_cmd *node, t_env *environ)
 void	pipeline(t_cmd *node, t_env *environ)
 {
 	t_cmd	*cur;
+	int		save;
 
 	cur = node;
 	while (cur->next != NULL)
 	{
-		set_pipeline_fd(cur);
 		pipeline_child(cur, environ);
 		cur = cur->next;
 	}
-	set_pipeline_fd(cur);
+	//set_pipeline_fd(cur);
 	if (execute_command_type(cur, environ, CHILD) == 1)
 		command_not_found(cur->cmd);
 	else

@@ -6,7 +6,7 @@
 /*   By: gychoi <gychoi@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 17:25:50 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/22 19:46:44 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/22 20:25:11 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,24 +33,27 @@ int	is_numeric(char *arg)
 	return (1);
 }
 
-void	ft_exit(t_cmd *node)
+int	ft_exit(t_cmd *node, int process_type)
 {
 	int	status;
 
 	if (node->args[0] != NULL)
 	{
+		if (process_type == 2)
+			ft_putstr_fd("exit\n", 2);
 		if (node->args[1] != NULL)
 		{
+			if (!is_numeric(node->args[1]))
+				exit(255);
 			if (node->args[2] != NULL)
 			{
 				ft_putstr_fd("minishell: exit: too many arguments", 2);
-				exit(1);
+				return (1);
 			}
-			if (!is_numeric(node->args[1]))
-				exit(255);
 			status = ft_atoi(node->args[1]);
 			exit(status);
 		}
 		exit(0);
 	}
+	return (1);
 }
