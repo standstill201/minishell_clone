@@ -6,7 +6,7 @@
 /*   By: gychoi <gychoi@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 17:55:27 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/21 16:53:14 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/24 18:21:08 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	ft_echo(t_cmd *node)
 
 	i = 1;
 	option = 0;
-	if (node->args[i] && check_option(node->args[i]))
+	while (node->args[i] && check_option(node->args[i]))
 	{
 		option = 1;
 		i++;

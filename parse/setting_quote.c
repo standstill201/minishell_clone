@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 07:35:29 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/23 09:24:55 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/24 17:50:10 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,6 @@ void	set_env(t_list **root, int *status, t_env *environ)
 			}
 			else
 				temp->content = ft_strdup(return_val);
-			temp->
 		}
 		temp = temp->next;
 	}

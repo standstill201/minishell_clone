@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 19:19:23 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/24 17:40:31 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/24 18:06:34 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,10 @@
 # define CHILD	4
 
 int		execute_error(char *message, int process_type);
-void	execute_command_error(char *command);
+void	no_such_file_or_directory(char *command);
 void	command_not_found(char *command);
 void	is_a_directory(char *command);
+void	permission_denied(char *command);
 
 char	*find_path(char *command, char **envp);
 int		execute_command(t_cmd *node, char **envp);

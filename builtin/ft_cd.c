@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 19:49:01 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/21 14:42:10 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/24 17:57:41 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ int	ft_cd(t_cmd *node, t_env *environ)
 	{
 		ft_putstr_fd("minishell: cd: ", 2);
 		ft_putstr_fd(node->args[1], 2);
-		ft_putstr_fd(": No such file or directory\n", 2);
+		ft_putstr_fd(": ", 2);
+		perror("");
 		return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);

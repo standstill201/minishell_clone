@@ -6,7 +6,7 @@
 /*   By: gychoi <gychoi@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 20:05:54 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/24 16:13:25 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/24 18:06:37 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,11 @@ int	execute_error(char *message, int process_type)
 	return (1);
 }
 
-void	execute_command_error(char *command)
+void	no_such_file_or_directory(char *command)
 {
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(command, 2);
-	ft_putstr_fd(": ", 2);
-	perror("");
+	ft_putstr_fd(": No such file or directory", 2);
 	exit(127);
 }
 
@@ -45,5 +44,13 @@ void	is_a_directory(char *command)
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(command, 2);
 	ft_putstr_fd(": is a directory\n", 2);
+	exit(126);
+}
+
+void	permission_denied(char *command)
+{
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(command, 2);
+	ft_putstr_fd(": Permission denied\n", 2);
 	exit(126);
 }
