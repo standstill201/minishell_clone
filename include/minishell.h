@@ -33,6 +33,7 @@ extern int	g_is_ended;
 
 // parse_part
 t_cmd	*parse_data(char *str, int *status, t_env *environ);
+char	*read_string_before_white_quote(char *str, t_list **root);
 t_list	*seperate_string(char *str, int *status);
 void	set_pipe_n(t_list **root);
 void	set_env(t_list **root, int *status, t_env *environ);

@@ -24,6 +24,7 @@ typedef struct s_list
 	int				is_fd_add;
 	int				is_fd_input;
 	int				is_question_dollor;
+	int				is_env;
 	int				fd;
 	struct s_list	*next;
 }	t_list;

@@ -29,6 +29,7 @@ t_list	*ft_lstnew(char *content, int is_meta)
 	new_node -> is_fd_new = 0;
 	new_node -> is_fd_add = 0;
 	new_node -> is_fd_input = 0;
+	new_node -> is_env = 0;
 	new_node -> fd = -2;
 	return (new_node);
 }
