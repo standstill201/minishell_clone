@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 13:03:19 by seokjyoo          #+#    #+#             */
-/*   Updated: 2023/02/24 22:12:17 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/24 22:23:42 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void	handle_child_process(t_env *environ, int *status)
 		free_parsed_data(line_root);
 		return ;
 	}
-	//*status = execute(line_root, environ);
+	*status = execute(line_root, environ);
 	free(line);
 	free_parsed_data(line_root);
 }
