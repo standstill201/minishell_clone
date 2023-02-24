@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 11:28:00 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/23 08:25:46 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/24 19:46:49 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ void	add_t_cmd(t_cmd **return_val, t_list *pre_temp, t_list *temp)
 	ft_lstlast_cmd(*return_val)->pipe_n = temp->pipe_n;
 	ft_lstlast_cmd(*return_val)->fd_in = fds[0];
 	ft_lstlast_cmd(*return_val)->fd_out = fds[1];
+	free(fds);
 }
 
 t_cmd	*final_parse(t_list **pre_lst)
