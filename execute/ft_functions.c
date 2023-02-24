@@ -6,7 +6,7 @@
 /*   By: gychoi <gychoi@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 17:43:32 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/24 16:26:06 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/24 17:39:48 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,16 +41,6 @@ int	ft_pipe(int *fd)
 	ret = 0;
 	if (pipe(fd) == -1)
 		ret = execute_error("failed to pipe", CHILD);
-	return (ret);
-}
-
-int	ft_waitpid(pid_t pid, int *statloc, int options, int process_type)
-{
-	int	ret;
-
-	ret = 0;
-	if (waitpid(pid, statloc, options) == -1)
-		ret = execute_error("failed to waitpid", process_type);
 	return (ret);
 }
 
