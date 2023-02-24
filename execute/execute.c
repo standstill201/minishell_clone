@@ -142,12 +142,10 @@ int	pipeline(t_cmd *line, t_env *environ)
 
 int	execute(t_cmd *line, t_env *environ)
 {
-	int	ret;
+	int	ret = 18;
 
 	signal(SIGINT, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
-
-
 	if (line->next == NULL)
 	{
 		set_simple_command_fd(line, PARENT);

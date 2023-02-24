@@ -108,6 +108,7 @@ void	set_env(t_list **root, int *status, t_env *environ)
 			}
 			else
 				temp->content = ft_strdup(return_val);
+			temp->
 		}
 		temp = temp->next;
 	}

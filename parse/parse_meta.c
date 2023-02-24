@@ -12,7 +12,7 @@
 
 #include "../include/minishell.h"
 
-char	*extract_string(char *str, char trg)
+char	*extract_string(char *str, char trg, int *status)
 {
 	int		index;
 
@@ -24,7 +24,7 @@ char	*extract_string(char *str, char trg)
 		index++;
 	}
 	if (str[index] == '\0')
-		unexpected_token_end(0);
+		unexpected_token_end(status);
 	return (NULL);
 }
 
@@ -35,7 +35,9 @@ char	*read_string_before_quote(char *str, t_list **root, int *status)
 
 	trg = *str;
 	str++;
-	return_val = extract_string(str, trg);
+	return_val = extract_string(str, trg, status);
+	if (!return_val)
+		return (NULL);
 	if (trg == '\"')
 	{
 		if (double_quote_task(return_val, root, status))
