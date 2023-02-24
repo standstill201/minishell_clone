@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 19:19:23 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/24 02:24:20 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/24 16:48:30 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,6 @@
 # define WRITE_END	1
 # define PARENT	2
 # define CHILD	4
-# define PIPELINE 8
-# define REDIRECT 16
 
 int		execute_error(char *message, int process_type);
 void	execute_command_error(char *command);
@@ -33,6 +31,8 @@ void	is_a_directory(char *command);
 
 char	*find_path(char *command, char **envp);
 int		execute_command(t_cmd *node, char **envp);
+int		retrieve_childs(t_cmd *line, pid_t pid, int *statloc, int process_type);
+int		child_signal(int pid_status);
 int		execute(t_cmd *commandline, t_env *environ);
 
 void	set_simple_command_fd(t_cmd *node, int process_type);
@@ -42,6 +42,7 @@ void	set_command_fd(t_cmd *node, int process_type);
 int		ft_close(int fd, int process_type);
 int		ft_dup2(int fd1, int fd2, int process_type);
 int		ft_pipe(int *fd);
+pid_t	ft_wait(int *statloc, int process_type);
 int		ft_waitpid(pid_t pid, int *statloc, int options, int process_type);
 
 #endif

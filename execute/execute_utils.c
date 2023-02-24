@@ -6,7 +6,7 @@
 /*   By: gychoi <gychoi@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 15:23:08 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/23 17:43:51 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/24 16:49:11 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,4 +68,31 @@ int	execute_command(t_cmd *node, char **envp)
 		free(envp);
 	}
 	return (1);
+}
+
+int	retrieve_childs(t_cmd *line, pid_t pid, int *statloc, int process_type)
+{
+	t_cmd	*cur;
+	pid_t	retrived;
+	int		pid_statloc;
+
+	cur = line;
+	while (cur != NULL)
+	{
+		retrived = ft_wait(statloc, process_type);
+		if (retrived == pid)
+			pid_statloc = *statloc;
+		cur = cur->next;
+	}
+	return (pid_statloc);
+}
+
+int	child_signal(int pid_status)
+{
+	if (WIFEXITED(pid_status))
+		return (WEXITSTATUS(pid_status));
+	else if (WTERMSIG(pid_status))
+		return (128 + pid_status);
+	else
+		return (1);
 }

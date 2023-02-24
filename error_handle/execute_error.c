@@ -6,7 +6,7 @@
 /*   By: gychoi <gychoi@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 20:05:54 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/22 16:29:01 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/24 16:13:25 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ int	execute_error(char *message, int process_type)
 {
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(message, 2);
-	ft_putstr_fd("\n", 2);
+	ft_putstr_fd(": ", 2);
+	perror("");
 	if (process_type == CHILD)
 		exit(1);
 	return (1);

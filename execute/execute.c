@@ -6,11 +6,11 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 01:31:40 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/24 04:21:09 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/24 16:51:17 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include	"../include/execute.h"
+#include "../include/execute.h"
 
 int	execute_builtin(t_cmd *node, t_env *environ, int process_type)
 {
@@ -36,13 +36,15 @@ int	execute_builtin(t_cmd *node, t_env *environ, int process_type)
 	return (ret);
 }
 
-int	execute_command_type(t_cmd *node, t_env *environ, int process_type)
+int	execute_command_by_type(t_cmd *node, t_env *environ, int process_type)
 {
 	struct stat	sb;
 	pid_t		pid;
 	int			status;
+	int			ret;
 
-	if (execute_builtin(node, environ, process_type) == -1)
+	ret = execute_builtin(node, environ, process_type);
+	if (ret == -1)
 	{
 		pid = fork();
 		if (pid == -1)
@@ -53,17 +55,35 @@ int	execute_command_type(t_cmd *node, t_env *environ, int process_type)
 				is_a_directory(node->cmd);
 			if (execute_command(node, get_environ(environ)) == 1)
 				command_not_found(node->cmd);
+			exit(0);
 		}
 		if (waitpid(pid, &status, 0) == -1)
 			execute_error("failed to waitpid", process_type);
+		
+		if (WIFEXITED(status))
+		{
+			printf("(exit success)\n");
+			return (WEXITSTATUS(status));
+		}
+		else if (WTERMSIG(status))
+		{
+			printf("(got signal)\n");
+			return (status);
+		}
+		else
+		{
+			printf("(exit failed)\n");
+			return (1);
+		}
 	}
-	return (WEXITSTATUS(status));
+	return (ret);
 }
 
 void	pipeline_child(t_cmd *node, t_env *environ)
 {
 	int		pfd[2];
 	pid_t	pid;
+	// int		infile = STDIN_FILENO;
 
 	ft_pipe(pfd);
 	pid = fork();
@@ -71,24 +91,31 @@ void	pipeline_child(t_cmd *node, t_env *environ)
 		execute_error("failed to fork", CHILD);
 	else if (pid == 0)
 	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		if (node->fd_in != -2)
 			ft_dup2(node->fd_in, STDIN_FILENO, CHILD);
 		ft_close(pfd[READ_END], CHILD);
 		ft_dup2(pfd[WRITE_END], STDOUT_FILENO, CHILD);
+
+		// ft_dup2(infile, STDIN_FILENO);
+		// close(infile);
+
 		if (node->fd_out != -2)
 			ft_dup2(node->fd_out, STDOUT_FILENO, CHILD);
-		if (execute_command_type(node, environ, CHILD) == 1)
-			command_not_found(node->cmd);
-		exit(0);
+		exit(execute_command_by_type(node, environ, CHILD));
 	}
 	ft_close(pfd[WRITE_END], CHILD);
 	ft_dup2(pfd[READ_END], STDIN_FILENO, CHILD);
+	// close(infile); // infile == 0, x
+	// infile = pfd[READ_END];
 }
 
 int	pipeline(t_cmd *line, t_env *environ)
 {
 	t_cmd	*cur;
 	pid_t	pid;
+	int		status;
 
 	cur = line;
 	while (cur->next != NULL)
@@ -97,34 +124,47 @@ int	pipeline(t_cmd *line, t_env *environ)
 		cur = cur->next;
 	}
 	pid = fork();
-	if (pid == 0)
+	if (pid == -1)
+		execute_error("failed to fork", PARENT);
+	else if (pid == 0)
 	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		if (cur->fd_in != -2)
 			ft_dup2(cur->fd_in, STDIN_FILENO, PARENT);
 		if (cur->fd_out != -2)
 			ft_dup2(cur->fd_out, STDOUT_FILENO, PARENT);
-		if (execute_command_type(cur, environ, PARENT) == 1)
-			command_not_found(cur->cmd);
-		exit(0);
+		exit(execute_command_by_type(cur, environ, CHILD));
 	}
-	waitpid(pid, NULL, 0);
-	return (0);
+	status = retrieve_childs(line, pid, &status, PARENT);
+	return (child_signal(status));
 }
 
 int	execute(t_cmd *line, t_env *environ)
 {
 	int	ret;
 
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+
+
 	if (line->next == NULL)
 	{
 		set_simple_command_fd(line, PARENT);
-		ret = execute_command_type(line, environ, PARENT);
+		ret = execute_command_by_type(line, environ, PARENT);
 		reset_simple_command_fd(line, PARENT);
 		return (ret);
 	}
 	int	pid = fork();
 	if (!pid)
+	{
 		ret = pipeline(line, environ);
-	wait(NULL);
+		printf("\n----------\nsignal: %d\n-----------\n", ret);
+		exit(ret);
+	}
+	waitpid(pid, NULL, 0);
+	// set_simple_command_fd(line, PARENT);
+	// pipeline(line, environ);
+	// reset_simple_command_fd(line, PARENT);
 	return (ret);
 }
