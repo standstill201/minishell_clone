@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 07:28:27 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/23 07:22:25 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/24 21:37:18 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ char	*read_string_before_quote(char *str, t_list **root, int *status)
 		ft_lstadd_back(root, ft_lstnew(return_val, 0));
 		ft_lstlast(*root)->is_single_quote = 1;
 	}
+	free(return_val);
 	return (str + ft_strlen(return_val) + 1);
 }
 

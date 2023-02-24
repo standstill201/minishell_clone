@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/25 13:03:19 by seokjyoo          #+#    #+#             */
-/*   Updated: 2023/02/24 20:24:39 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/24 22:12:17 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,8 @@ void	free_parsed_data(t_cmd *line_root)
 			i++;
 		}
 		free(tmp->args);
+		free(tmp);
 	}
-	free(line_root);
-	line_root = NULL;
 }
 
 static void	check_leaks(void)
@@ -97,9 +96,10 @@ void	handle_child_process(t_env *environ, int *status)
 	if (!line_root)
 	{
 		free(line);
+		free_parsed_data(line_root);
 		return ;
 	}
-	*status = execute(line_root, environ);
+	//*status = execute(line_root, environ);
 	free(line);
 	free_parsed_data(line_root);
 }
