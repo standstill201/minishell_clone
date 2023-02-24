@@ -6,7 +6,7 @@
 /*   By: gychoi <gychoi@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 20:05:54 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/24 18:06:37 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/24 18:35:38 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	no_such_file_or_directory(char *command)
 {
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(command, 2);
-	ft_putstr_fd(": No such file or directory", 2);
+	ft_putstr_fd(": No such file or directory\n", 2);
 	exit(127);
 }
 
