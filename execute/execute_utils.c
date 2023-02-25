@@ -6,7 +6,7 @@
 /*   By: gychoi <gychoi@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 15:23:08 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/24 16:49:11 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/24 18:10:30 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,14 @@ char	*find_path(char *command, char **envp)
 	return (find);
 }
 
+static void	check_command_access(char *command)
+{
+	if (access(command, F_OK) == -1)
+		no_such_file_or_directory(command);
+	if (access(command, X_OK) == -1)
+		permission_denied(command);
+}
+
 int	execute_command(t_cmd *node, char **envp)
 {
 	char	*command;
@@ -49,8 +57,7 @@ int	execute_command(t_cmd *node, char **envp)
 
 	if (ft_strchr(node->cmd, '/'))
 	{
-		if (access(node->cmd, F_OK | X_OK) == -1)
-			execute_command_error(node->cmd);
+		check_command_access(node->cmd);
 		command = ft_strdup(node->cmd);
 	}
 	else

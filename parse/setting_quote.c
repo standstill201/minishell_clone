@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 07:35:29 by codespace         #+#    #+#             */
-/*   Updated: 2023/02/23 09:24:55 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/24 21:51:39 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ t_list	*string_merger(t_list *temp, t_list **return_val)
 	int		pipe_n;
 	int		here_word_trg;
 
-	add_string = "";
+	add_string = malloc(sizeof(char));
+	add_string[0] = '\0';
 	here_word_trg = 0;
 	pipe_n = temp->pipe_n;
 	while (temp && temp->is_meta == 0)
@@ -27,6 +28,7 @@ t_list	*string_merger(t_list *temp, t_list **return_val)
 		if (temp->is_here_word)
 			here_word_trg = 1;
 		temp_string = ft_strdup(add_string);
+		free(add_string);
 		add_string = ft_strjoin(temp_string, temp->content);
 		free(temp_string);
 		temp = temp->next;

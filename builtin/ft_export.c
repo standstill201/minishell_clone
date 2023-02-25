@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:12:44 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/23 09:20:06 by codespace        ###   ########.fr       */
+/*   Updated: 2023/02/24 20:47:27 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,7 @@ void	export_append(char *cmd, t_env *environ)
 			free(cur->val);
 			cur->val = tmp;
 			cur->export = 1;
-			free(key);
-			free(value);
+			free_strings(key, value);
 			return ;
 		}
 		cur = cur->next;
@@ -83,6 +82,8 @@ void	export_add(char *cmd, t_env *environ)
 	key = ft_strdup(cmd);
 	if (!found)
 		add_environ(environ, key, NULL, 0);
+	else
+		free(key);
 }
 
 void	show_export(t_env *environ)

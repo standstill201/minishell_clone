@@ -6,7 +6,7 @@
 /*   By: gychoi <gychoi@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 17:28:31 by gychoi            #+#    #+#             */
-/*   Updated: 2023/02/23 17:28:52 by gychoi           ###   ########.fr       */
+/*   Updated: 2023/02/24 20:46:17 by gychoi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,4 +22,10 @@ int	is_meta_builtin(char c)
 	|| c == '<' || c == '>')
 		return (1);
 	return (0);
+}
+
+void	free_strings(char *s1, char *s2)
+{
+	free(s1);
+	free(s2);
 }
