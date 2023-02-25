@@ -86,7 +86,20 @@ void	question_mark_extention(t_list *temp, int *status)
 	temp->content = ft_itoa(*status);
 }
 
-t_list	*seperate_string_e(char *str, int pipe_n, char c)
+char	*read_string_before_white_quote_e(char *str, t_list **root)
+{
+	int		index;
+	char	*return_val;
+
+	index = 0;
+	while (str[index] && !ft_iswhite(str[index]))
+		index++;
+	return_val = ft_substr(str, 0, index);
+	ft_lstadd_back(root, ft_lstnew(return_val, 0));
+	return (str + index);
+}
+
+t_list	*seperate_string_e(char *str, int pipe_n)
 {
 	t_list	*root;
 
@@ -103,24 +116,20 @@ t_list	*seperate_string_e(char *str, int pipe_n, char c)
 		}
 		else
 		{
-			str = read_string_before_white_quote(str, &root);
+			str = read_string_before_white_quote_e(str, &root);
 			ft_lstlast(root)->pipe_n = pipe_n;
 		}
-		if (c == '\'')
-		{
-			ft_lstlast(root)->is_single_quote = 1;
-		}
+		ft_lstlast(root)->is_single_quote = 1;
 	}
 	return (root);
 }
 
-void	env_white_case(t_list *temp, t_list **root)
+void	env_white_case(t_list *temp)
 {
 	t_list	*result;
 	t_list	*temp_next;
-	int		temp_n;
 
-	result = seperate_string_e(temp->content, temp->pipe_n, temp->content[0]);
+	result = seperate_string_e(temp->content, temp->pipe_n);
 	temp_next = temp->next;
 	free(temp->content);
 	temp->content = ft_strdup(" ");
@@ -145,7 +154,6 @@ void	set_env(t_list **root, int *status, t_env *environ)
 			&& temp->content[0] == '$' && temp->is_single_quote == 0 && !temp->is_env)
 		{
 			return_val = get_env(environ, temp->content + 1);
-			printf("str: %s\n", return_val);
 			free(temp->content);
 			if (return_val == NULL)
 			{
@@ -156,7 +164,7 @@ void	set_env(t_list **root, int *status, t_env *environ)
 			{
 				temp->content = ft_strdup(return_val);
 				temp->is_env = 1;
-				env_white_case(temp, root);
+				env_white_case(temp);
 			}
 		}
 		temp = temp->next;

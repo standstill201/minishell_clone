@@ -12,10 +12,8 @@
 
 #include "../../include/minishell.h"
 
-char	*line_backup_realloc(char *buffer, char *backup, char *line, int fd)
+char	*line_backup_realloc(char *buffer, char *backup, char *line)
 {
-	int	read_size;
-
 	line = re_allocate(buffer, line);
 	backup_maker(buffer, &backup);
 	return (line);

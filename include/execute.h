@@ -38,7 +38,7 @@ int		execute(t_cmd *commandline, t_env *environ);
 
 void	set_simple_command_fd(t_cmd *node, int process_type);
 void	reset_simple_command_fd(t_cmd *node, int process_type);
-void	set_command_fd(t_cmd *node, int process_type);
+void	set_command_fd(t_cmd *node);
 
 int		ft_close(int fd, int process_type);
 int		ft_dup2(int fd1, int fd2, int process_type);

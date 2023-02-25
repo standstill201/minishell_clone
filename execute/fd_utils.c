@@ -30,7 +30,7 @@ void	reset_simple_command_fd(t_cmd *node, int process_type)
 	ft_dup2(node->fd_old_out, STDOUT_FILENO, process_type);
 }
 
-void	set_command_fd(t_cmd *node, int process_type)
+void	set_command_fd(t_cmd *node)
 {
 	if (node->fd_in != -2)
 		ft_dup2(node->fd_in, STDIN_FILENO, CHILD);

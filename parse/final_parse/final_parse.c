@@ -14,9 +14,6 @@
 
 t_list	*cmd_parser(t_list *pre_temp, char **cmd)
 {
-	int		index;
-
-	index = 0;
 	while (pre_temp && (pre_temp->is_meta == 1 || pre_temp->is_here_word == 1
 			|| pre_temp->is_fd_input == 1 || pre_temp->is_fd_new == 1
 			|| pre_temp->is_fd_add == 1))
@@ -33,7 +30,7 @@ char	**arg_parser(t_list *pre_temp, char **args, int index)
 	int		inside_index;
 
 	inside_index = 0;
-	while (inside_index < index || index == 0 && inside_index == 0)
+	while (inside_index < index || (index == 0 && inside_index == 0))
 	{
 		if (pre_temp->is_meta == 0 && pre_temp->is_here_word == 0
 			&& pre_temp->is_fd_input == 0 && pre_temp->is_fd_new == 0
@@ -57,14 +54,14 @@ int	*out_in_fd(t_list *pre_temp, t_list *temp)
 	return_val[1] = -2;
 	while (pre_temp != temp)
 	{
-		if (pre_temp && pre_temp->is_here_word || pre_temp->is_fd_input)
+		if (pre_temp && (pre_temp->is_here_word || pre_temp->is_fd_input))
 			return_val[0] = pre_temp->fd;
-		else if (pre_temp && pre_temp->is_fd_new || pre_temp->is_fd_add)
+		else if (pre_temp && (pre_temp->is_fd_new || pre_temp->is_fd_add))
 			return_val[1] = pre_temp->fd;
 		pre_temp = pre_temp->next;
-		if (pre_temp && pre_temp->is_here_word || pre_temp->is_fd_input)
+		if (pre_temp && (pre_temp->is_here_word || pre_temp->is_fd_input))
 			return_val[0] = pre_temp->fd;
-		else if (pre_temp && pre_temp->is_fd_new || pre_temp->is_fd_add)
+		else if (pre_temp && (pre_temp->is_fd_new || pre_temp->is_fd_add))
 			return_val[1] = pre_temp->fd;
 	}
 	return (return_val);

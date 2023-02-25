@@ -13,8 +13,8 @@
 NAME = minishell
 
 CC = cc
-#CFLAGS = -Wall -Wextra -Werror
-CFLAGS = -g
+CFLAGS = -Wall -Wextra -Werror
+# CFLAGS = -g
 RM = rm -rf
 
 LFTDIR = ./LIBFT/

@@ -66,10 +66,8 @@ char	*read_string_while_white(char *str, t_list **root)
 
 char	*read_string_before_pipe(char *str, t_list **root, int *status)
 {
-	int		index;
 	char	*return_val;
 
-	index = 0;
 	str++;
 	if (*str == '|')
 	{

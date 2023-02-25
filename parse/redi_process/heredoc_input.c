@@ -66,7 +66,7 @@ int	g_is_ended_case(int *status, char *str, int fd)
 	return (0);
 }
 
-int	read_heredoc_infile(char *limiter, t_list *temp, int *status)
+int	read_heredoc_infile(char *limiter, int *status)
 {
 	int		fd;
 	char	*line;

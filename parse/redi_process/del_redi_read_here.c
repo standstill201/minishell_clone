@@ -89,14 +89,11 @@ t_list	*redi_input(t_list *temp, int *status)
 
 t_list	*redi_heredoc(t_list *temp, int *status)
 {
-	t_list	*temp_first;
-
-	temp_first = temp;
 	while (temp && temp->is_here_word == 0)
 		temp = temp->next;
 	if (temp)
 	{
-		temp->fd = read_heredoc_infile(temp->content, temp_first, status);
+		temp->fd = read_heredoc_infile(temp->content, status);
 		if (temp->fd == -2)
 			return (0);
 	}

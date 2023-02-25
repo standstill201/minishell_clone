@@ -40,7 +40,7 @@ void	set_env(t_list **root, int *status, t_env *environ);
 void	*same_file(t_list **root);
 // heredoc_part
 int		set_here(t_list **pre_parse, int *status);
-int		read_heredoc_infile(char *limiter, t_list *temp, int *status);
+int		read_heredoc_infile(char *limiter, int *status);
 int		create_temp_file(void);
 // heredoc_part end
 
@@ -83,7 +83,7 @@ int		unexpected_token_end(int *status);
 // error_handle_part end
 
 // gnl
-char	*line_backup_realloc(char *buffer, char *backup, char *line, int fd);
+char	*line_backup_realloc(char *buffer, char *backup, char *line);
 char	*re_allocate(char *buffer, char *line);
 void	backup_maker(char *buffer, char **backup);
 int		sigint_case(int tmp_fd);

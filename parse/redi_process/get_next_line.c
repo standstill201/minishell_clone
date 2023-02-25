@@ -85,10 +85,8 @@ char	*alloc_line(int fd, char *backup, char *line)
 {
 	char	buffer[7];
 	ssize_t	read_size;
-	size_t	index;
 	int		tmp_fd;
 
-	index = 0;
 	ft_memset(buffer, 0, 7);
 	tmp_fd = dup(0);
 	read_size = read(fd, buffer, 6);
@@ -97,7 +95,7 @@ char	*alloc_line(int fd, char *backup, char *line)
 	while (read_size > 0)
 	{
 		if (ft_strchr(buffer, (int) '\n'))
-			return (line_backup_realloc(buffer, backup, line, fd));
+			return (line_backup_realloc(buffer, backup, line));
 		else
 			line = re_allocate(buffer, line);
 		read_size = read(fd, buffer, 6);

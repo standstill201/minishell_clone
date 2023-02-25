@@ -125,6 +125,11 @@ int	main(int argc, char **argv, char **envp)
 	t_env	*environ;
 	int		status;
 
+	if (argv[1] || argc != 1)
+	{
+		ft_putstr_fd("no arg ", 2);
+		exit(1);
+	}
 	status = 0;
 	environ = set_environ(envp);
 	while (1)

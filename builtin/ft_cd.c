@@ -14,9 +14,6 @@
 
 int	ft_cd(t_cmd *node, t_env *environ)
 {
-	char	*cwd;
-	int		ret;
-
 	if (node->args[1] == NULL)
 	{
 		if (chdir(get_env(environ, "HOME")) == -1)

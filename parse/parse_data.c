@@ -25,9 +25,7 @@ t_cmd	*parse_data(char *str, int *status, t_env *environ)
 {
 	t_list	*parse_seperate;
 	t_cmd	*return_val;
-	int		index;
 
-	index = 0;
 	parse_seperate = seperate_string(str, status);
 	if (!parse_seperate)
 		return (error_seperate(parse_seperate));
