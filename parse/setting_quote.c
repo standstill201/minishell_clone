@@ -85,6 +85,25 @@ void	question_mark_extention(t_list *temp, int *status)
 	free(temp->content);
 	temp->content = ft_itoa(*status);
 }
+// remove single quote or double quote
+// if quote dosen't close, exit and print error message
+char *remove_quote(char *str)
+{
+	int len;
+	char *new_str;
+
+	len = ft_strlen(str);
+	if (len < 2 || (str[0] != '\'' && str[0] != '"') || str[len-1] != str[0])
+	{
+		fprintf(stderr, "Error: invalid string format\n");
+		return NULL;
+	}
+	new_str = (char *)malloc(sizeof(char) * (len-1));
+	strncpy(new_str, str+1, len-2);
+	new_str[len-2] = '\0';
+	free(str);
+	return new_str;
+}
 
 t_list	*seperate_string_e(char *str, int pipe_n)
 {
@@ -103,6 +122,7 @@ t_list	*seperate_string_e(char *str, int pipe_n)
 		}
 		else
 		{
+			// str = remove_quote(str);
 			str = read_string_before_white_quote(str, &root);
 			ft_lstlast(root)->pipe_n = pipe_n;
 		}
@@ -150,6 +170,7 @@ void	set_env(t_list **root, int *status, t_env *environ)
 			&& temp->content[0] == '$' && temp->is_single_quote == 0 && !temp->is_env)
 		{
 			return_val = get_env(environ, temp->content + 1);
+			printf("str: %s\n", return_val);
 			free(temp->content);
 			if (return_val == NULL)
 			{
