@@ -55,6 +55,8 @@ int		is_meta(char c);
 int		double_quote_task(char *return_val, t_list **root, int *status);
 char	*read_string_before_redirection(char *str, t_list **root);
 char	*read_string_before_dollar(char *str, t_list **root, int *status);
+void	env_input(t_env *environ, t_list *temp, t_list **root);
+void	del_empty_envirnment(t_list **root, t_list *temp);
 // meta_parse_part end
 
 // redirection_part

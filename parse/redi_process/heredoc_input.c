@@ -60,7 +60,7 @@ int	g_is_ended_case(int *status, char *str, int fd)
 	if (g_is_ended)
 	{
 		free_everything(str, fd);
-		*status = 130;
+		*status = 1;
 		return (1);
 	}
 	return (0);

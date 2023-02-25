@@ -31,6 +31,7 @@ SRC = ./main.c \
 	./parse/pipe_n.c \
 	./parse/seperate_string.c \
 	./parse/setting_quote.c \
+	./parse/env_white_case.c \
 	./parse/redi_process/set_here.c \
 	./parse/redi_process/heredoc_input.c \
 	./parse/redi_process/del_redi_read_here.c \
