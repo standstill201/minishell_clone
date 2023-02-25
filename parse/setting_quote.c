@@ -85,27 +85,8 @@ void	question_mark_extention(t_list *temp, int *status)
 	free(temp->content);
 	temp->content = ft_itoa(*status);
 }
-// remove single quote or double quote
-// if quote dosen't close, exit and print error message
-char *remove_quote(char *str)
-{
-	int len;
-	char *new_str;
 
-	len = ft_strlen(str);
-	if (len < 2 || (str[0] != '\'' && str[0] != '"') || str[len-1] != str[0])
-	{
-		fprintf(stderr, "Error: invalid string format\n");
-		return NULL;
-	}
-	new_str = (char *)malloc(sizeof(char) * (len-1));
-	strncpy(new_str, str+1, len-2);
-	new_str[len-2] = '\0';
-	free(str);
-	return new_str;
-}
-
-t_list	*seperate_string_e(char *str, int pipe_n)
+t_list	*seperate_string_e(char *str, int pipe_n, char c)
 {
 	t_list	*root;
 
@@ -122,19 +103,13 @@ t_list	*seperate_string_e(char *str, int pipe_n)
 		}
 		else
 		{
-			// str = remove_quote(str);
 			str = read_string_before_white_quote(str, &root);
 			ft_lstlast(root)->pipe_n = pipe_n;
 		}
-	}
-	// print root
-	t_list *temp = root;
-	while (temp)
-	{
-		printf("----------------------\n");
-		printf("content: %s\n", temp->content);
-		printf("pipe: %d\n", temp->pipe_n);
-		temp = temp->next;
+		if (c == '\'')
+		{
+			ft_lstlast(root)->is_single_quote = 1;
+		}
 	}
 	return (root);
 }
@@ -145,7 +120,7 @@ void	env_white_case(t_list *temp, t_list **root)
 	t_list	*temp_next;
 	int		temp_n;
 
-	result = seperate_string_e(temp->content, temp->pipe_n);
+	result = seperate_string_e(temp->content, temp->pipe_n, temp->content[0]);
 	temp_next = temp->next;
 	free(temp->content);
 	temp->content = ft_strdup(" ");
